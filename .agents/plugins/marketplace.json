@@ -1,0 +1,12 @@
+{
+  "name": "frameo-relay",
+  "interface": { "displayName": "Frameo Relay" },
+  "plugins": [
+    {
+      "name": "frameorelay",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

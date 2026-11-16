@@ -8,7 +8,7 @@ Usage: python scripts/build_distributable.py
 
 Before building, it scans EVERY text file in the repository (not only what goes into the zip) for
 things that must never be published: local user paths, email addresses, token-shaped strings, and
-any extra private strings you list (one per line) in ~/.claude/frameorelay/forbidden.txt or in the
+any extra private strings you list (one per line) in ~/.frameorelay/forbidden.txt (or the older ~/.claude/frameorelay/forbidden.txt) or in the
 FRAMEORELAY_FORBIDDEN environment variable (separated by ';'). It exits 1 and writes nothing if it finds any.
 """
 import json
@@ -19,8 +19,8 @@ import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INCLUDE = [".claude-plugin/plugin.json", "README.md", "LICENSE", "SKILLS.md", "agent.json", "CHANGELOG.md"]
-INCLUDE_DIRS = ["skills", "agents", "examples"]
-INCLUDE_SCRIPTS = ["scripts/relay_check.py"]
+INCLUDE_DIRS = ["skills", "agents", "examples", "docs"]
+INCLUDE_SCRIPTS = ["scripts/relay_check.py", "scripts/install.py"]
 SKIP_DIRS = {".git", "dist", "__pycache__", ".pytest_cache", "node_modules"}
 SKIP_SUFFIXES = (".pyc", ".zip", ".png", ".jpg", ".jpeg", ".webp", ".mp4", ".mov", ".mp3", ".wav")
 
@@ -36,10 +36,11 @@ PATTERNS = [
 
 def extra_forbidden() -> list:
     items = []
-    path = os.path.join(os.path.expanduser("~"), ".claude", "frameorelay", "forbidden.txt")
-    if os.path.isfile(path):
-        with open(path, encoding="utf-8") as fh:
-            items += [ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")]
+    for parts in ((".frameorelay", "forbidden.txt"), (".claude", "frameorelay", "forbidden.txt")):
+        path = os.path.join(os.path.expanduser("~"), *parts)
+        if os.path.isfile(path):
+            with open(path, encoding="utf-8") as fh:
+                items += [ln.strip() for ln in fh if ln.strip() and not ln.startswith("#")]
     items += [x.strip() for x in os.environ.get("FRAMEORELAY_FORBIDDEN", "").split(";") if x.strip()]
     return items
 

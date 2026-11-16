@@ -1,10 +1,21 @@
 # frameorelay
 
-A Claude Code / Claude Cowork plugin that turns a script into a finished video through the [Frameo](https://frameo.ai/mcp) MCP, with a validated contract that keeps many scenes **continuous, on-style and inside an approved budget**.
+A set of [Agent Skills](https://agentskills.io/) that turns a script into a finished video through the [Frameo](https://frameo.ai/mcp) MCP, with a validated contract that keeps many scenes **continuous, on-style and inside an approved budget**. It runs in **Claude Code and Claude Cowork, OpenAI Codex, and other agents that read `SKILL.md` skills** (Gemini CLI, Cursor, ...); see [Works with](#works-with).
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.2.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.3.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+
+## Works with
+
+| Host | Install | Tested by the author |
+|---|---|---|
+| Claude Code | plugin marketplace | yes |
+| Claude Cowork | upload the zip | no |
+| OpenAI Codex | plugin marketplace, or `python scripts/install.py --host codex` | **no** (follows OpenAI's docs) |
+| Gemini CLI, Cursor, any Agent Skills host | `python scripts/install.py --host gemini` / `--host cursor` / `--target <folder>` | no |
+
+The skills, the validator and the edit builders are host-neutral; only the install step differs. "Not tested" means the layout follows the host's published docs and the installer is covered by this repo's tests, but no full Frameo job has been driven through that host yet. Details, MCP setup per host and what each host can and cannot enforce: [docs/hosts.md](docs/hosts.md).
 
 ## What it does
 
@@ -23,14 +34,14 @@ Status: v0.2.0, early. It was built on real runs (a 9:16 story with 19 clips, vo
 
 ## Requirements
 
-- Claude Code or Claude Cowork with plugin support.
-- The Frameo MCP connected and signed in: `claude mcp add --transport http frameo https://mcp.frameo.ai/mcp`
+- An agent host that supports Agent Skills and MCP: Claude Code or Cowork, OpenAI Codex, Gemini CLI, Cursor, or similar.
+- The Frameo MCP connected and signed in, registered as `frameo` (`https://mcp.frameo.ai/mcp`). Claude Code: `claude mcp add --transport http frameo https://mcp.frameo.ai/mcp`. Codex: `codex mcp add frameo --url https://mcp.frameo.ai/mcp` then `codex mcp login frameo`. Other hosts: add it as a streamable-HTTP server in their MCP settings.
 - Python 3.10+ (for the validator and the edit builder; tested on 3.10 and 3.13).
 - A Frameo workspace with credits.
 
 ## Install
 
-Claude Code (user scope, works from any folder):
+**Claude Code** (user scope, works from any folder):
 
 ```
 claude plugin marketplace add tanmaysaxena/frameo-relay
@@ -39,7 +50,21 @@ claude plugin install frameorelay@frameo-relay --scope user
 
 From a local clone: `claude plugin marketplace add "<path to the clone>"`, then the same `install` line.
 
-Claude Cowork: `python scripts/build_distributable.py` writes `dist/frameorelay-<version>.zip`; upload it as a plugin. See "Known limits" for what is not verified there.
+**Claude Cowork:** `python scripts/build_distributable.py` writes `dist/frameorelay-<version>.zip`; upload it as a plugin. See "Known limits" for what is not verified there.
+
+**OpenAI Codex:**
+
+```
+codex plugin marketplace add tanmaysaxena/frameo-relay
+```
+
+then install `frameorelay` from the plugins directory in the Codex app. Or, from a clone, install the skills and the two subagent roles directly:
+
+```
+python scripts/install.py --host codex
+```
+
+**Gemini CLI, Cursor and other Agent Skills hosts:** from a clone, `python scripts/install.py --host gemini` (or `--host cursor`, `--host agents` for the shared `~/.agents/skills` folder, or `--target <your tool's skills folder>`). Skills are installed as `frameorelay-<name>`; `python scripts/install.py --uninstall` removes them. See [docs/hosts.md](docs/hosts.md).
 
 ## Use
 
@@ -67,10 +92,11 @@ It proves structure, ids, frozen locks and style, chain order, prompt sealing, b
 
 ## Known limits (unverified, test before relying)
 
+- Only Claude Code has been driven through a full job. Codex, Gemini CLI, Cursor and other hosts are supported by file layout and documented conventions but untested end to end; `docs/hosts.md` lists what each host can and cannot enforce (for example, Codex subagents inherit the parent's tools, so the "free tools only" rule for `scene-prep` and `review` is an instruction there, not a sandbox).
 - Whether background subagents can use the Frameo MCP tools without permission prompts in your client.
 - Claude Cowork: whether it runs the Python script, fans out subagents, honours `${CLAUDE_PLUGIN_ROOT}` and reaches the Frameo MCP. If it has no parallel subagents the conductor does the prep and review itself, in sequence; every check stays.
 - Frameo's real concurrency limit is undocumented: set `job.max_parallel` from what you measure.
-- The MCP tool names in `agents/*.md` assume the Frameo server is registered as `frameo`.
+- The MCP tool names in `agents/*.md` assume the Frameo server is registered as `frameo`; the `tools:` line there is Claude Code's spelling and is ignored by other hosts.
 - Frameo's models, prices and skills change. `skills/conductor/references/frameo-gotchas.md` and the `frameo-knowledge` skill record what was true when they were read; re-verify against the live MCP.
 
 ## Development

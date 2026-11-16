@@ -1,6 +1,6 @@
 # House defaults (example)
 
-Copy this file to `./frameo-jobs/house-defaults.md` (this project) or `~/.claude/frameorelay/house-defaults.md` (all projects) and edit it. frameorelay applies it without asking and mentions each rule once in the plan. Delete any section you do not want. See `skills/script-injector/references/user-defaults.md`.
+Copy this file to `./frameo-jobs/house-defaults.md` (this project) or `~/.frameorelay/house-defaults.md` (all projects) and edit it. frameorelay applies it without asking and mentions each rule once in the plan. Delete any section you do not want. See `skills/script-injector/references/user-defaults.md`.
 
 ## Look
 - Style anchor (pasted verbatim into every keyframe and clip prompt, 60 words or fewer, plain visible description, no brand or director names):

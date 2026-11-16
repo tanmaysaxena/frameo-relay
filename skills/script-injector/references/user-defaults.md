@@ -4,7 +4,8 @@ frameorelay ships with no personal taste baked in. If you want the same look, vo
 
 ## Where it is looked up (first match wins)
 1. `./frameo-jobs/house-defaults.md` in the folder you are working in (this project only).
-2. `~/.claude/frameorelay/house-defaults.md` (all your projects; on Windows `%USERPROFILE%\.claude\frameorelay\house-defaults.md`).
+2. `~/.frameorelay/house-defaults.md` (all your projects; on Windows `%USERPROFILE%\.frameorelay\house-defaults.md`).
+3. `~/.claude/frameorelay/house-defaults.md` (the older location, still read).
 
 Never put credentials or private ids you do not want in a transcript in this file: the agent reads it into the conversation.
 

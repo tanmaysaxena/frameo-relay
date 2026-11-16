@@ -1,11 +1,12 @@
 # Contributing
 
-Thanks for helping. frameorelay is a plugin of skills (instructions for Claude) plus two small standard-library Python scripts, so most contributions are careful edits to Markdown and a test.
+Thanks for helping. frameorelay is a set of agent skills (instructions for Claude Code, Codex and other agents) plus small standard-library Python scripts, so most contributions are careful edits to Markdown and a test.
 
 ## Ground rules
 
-- **Keep the design rules** (see `CLAUDE.md`): only the conductor spends; draft, then approval, then write; a continuing segment opens on the real extracted last frame; media identity is `media_id`; never refresh links before a generate call; save a paid call before sending it and recover by re-sending the same call.
+- **Keep the design rules** (see `AGENTS.md`): only the conductor spends; draft, then approval, then write; a continuing segment opens on the real extracted last frame; media identity is `media_id`; never refresh links before a generate call; save a paid call before sending it and recover by re-sending the same call.
 - **Python scripts are standard library only** and make no network calls.
+- **Stay host-neutral**: skills use `$RELAY_HOME` and the Frameo MCP's own tool names, and anything that needs subagents has a sequential fallback. If you change host support, update the status table in `docs/hosts.md` and say whether you tested it in that host.
 - **No personal data in the repo**: no names, emails, workspace or project ids, voice ids that belong to an account, local paths, job output, media or credentials. Personal taste (style, voices, music) belongs in a user's own defaults file, not in a skill (see `skills/script-injector/references/user-defaults.md`).
 - **Facts about Frameo carry a date.** If you add a limit, price or behaviour to `frameo-gotchas.md` or `skills-map.md`, say when you read it and how you verified it.
 - **No explicit content and no filter evasion.** See `skills/conductor/references/content-boundaries.md`.

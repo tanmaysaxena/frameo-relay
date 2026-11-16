@@ -1,0 +1,13 @@
+# AGENTS.md: frameorelay
+
+Instructions for any coding agent (Codex, Claude Code, Gemini CLI, Cursor, ...) working on this repository. To *use* frameorelay for a Frameo job, see `README.md` and `docs/hosts.md`.
+
+frameorelay runs Frameo video jobs through a validated contract (`relay.json`). It is a set of Agent Skills plus standard-library Python scripts. Standalone; nothing in it depends on any other repo.
+
+- Layout: `skills/<name>/SKILL.md` (panel-writer, script-injector, conductor, scene-prep, review, finish-cut, frameo-knowledge), `agents/` (the two subagent roles), `scripts/relay_check.py` (the one validator, stdlib only), `scripts/install.py` (installs the skills for Codex, Gemini CLI, Cursor and other hosts), `skills/finish-cut/scripts/` (edit-list, sound and final-render builders and halftone transitions, stdlib only), `skills/panel-writer/scripts/panel_check.py` (panel-script checker, stdlib only), `tests/`, `docs/hosts.md`, `examples/` (a sample `relay.json` and an example defaults file), plus host manifests: `.claude-plugin/` (Claude Code), `.codex-plugin/` and `.agents/plugins/` (Codex).
+- Design rules, in order: only the conductor spends; draft then approval then write; a continuing segment opens on the real extracted last frame; media identity is `media_id`; never refresh links before a generate call; save a paid call before sending it and recover by re-sending the same call.
+- Stay host-neutral. Skills refer to the validator and to each other through `$RELAY_HOME` (see the "Host note" in each skill), never through a host-specific variable or path. Use the Frameo MCP's own tool names, not a host's prefixed spelling. Anything that needs subagents must have a "do it in sequence yourself" fallback.
+- No hardcoded local paths. Never commit `frameo-jobs/`, media, credentials, account or project ids, or personal taste (style, voices, music): that belongs in the user's own defaults file (`skills/script-injector/references/user-defaults.md`).
+- Commit with your own configured git identity.
+- Before committing: `python -m pytest tests -q`, `python scripts/generate_skill_index.py --check`, `python scripts/build_distributable.py` (its private-string scan must pass). If a Claude Code CLI is available, `claude plugin validate .` too. A skill's YAML frontmatter must parse: a colon followed by a space inside an unquoted `description:` breaks it.
+- Frameo facts the skills rely on are in `skills/conductor/references/frameo-gotchas.md` with the date they were read; re-verify against the live MCP when it changes.

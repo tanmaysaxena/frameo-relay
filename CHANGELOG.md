@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.0 (2026-11-17): works beyond Claude
+
+- Host-neutral skills: `${CLAUDE_PLUGIN_ROOT}` and relative `../` paths replaced by `$RELAY_HOME` (each skill opens with a Host note saying what it is on each host); tool-name and subagent fallbacks stated.
+- `scripts/install.py`: installs the skills as `frameorelay-<name>` for Codex, Gemini CLI, Cursor, the shared `~/.agents/skills` folder, or any `--target`; installs a bundle to `~/.frameorelay`; writes the `scene-prep` and `review` roles as Codex custom agents; `--dry-run` and `--uninstall`.
+- Codex plugin manifest (`.codex-plugin/plugin.json`) and marketplace file (`.agents/plugins/marketplace.json`), `AGENTS.md` (`CLAUDE.md` now imports it), `docs/hosts.md`.
+- Personal defaults are also read from `~/.frameorelay/house-defaults.md` (the `~/.claude/frameorelay/` location still works).
+- Tests for the installer. Codex, Gemini CLI and Cursor support follows the hosts' published conventions and is not yet tested end to end.
+
 ## Unreleased
 
 Lessons from a 17-shot hard-cut film (retakes, motion pass, fix pass):

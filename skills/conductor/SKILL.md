@@ -5,10 +5,12 @@ description: Use to run an approved Frameo relay job (frameo-jobs/<job-id>/relay
 
 # Conductor
 
+> **Host note.** `$RELAY_HOME` below is the folder that holds `scripts/relay_check.py` and `skills/`. In Claude Code and Cowork it is `${CLAUDE_PLUGIN_ROOT}`. In any other agent (Codex, Gemini CLI, Cursor, ...) it is `$FRAMEORELAY_HOME` if set, else `~/.frameorelay` (made by `scripts/install.py`), else the folder of the clone or plugin copy this skill came from. Resolve it once and reuse it. Tool names here are the Frameo MCP's own (`generate_videos`, ...); your host may prefix them (for example `mcp__frameo__generate_videos`). Subagent steps: if your host cannot spawn subagents, do them yourself in sequence. Details: `$RELAY_HOME/docs/hosts.md`.
+
 You run the whole job, in the main session. **You are the only role that may call a paid Frameo tool or set `confirmed_by_user`.** Subagents (`scene-prep`, `review`) only read, view frames (free) and write their own notes. Read `references/relay-schema.md` (the contract) and `references/frameo-gotchas.md` (verified Frameo behaviour) before the first wave.
 
 ```
-CHECK=python "${CLAUDE_PLUGIN_ROOT}/scripts/relay_check.py"     (try python3 or py if python is missing)
+CHECK=python "$RELAY_HOME/scripts/relay_check.py"     (try python3 or py if python is missing)
 JOB=frameo-jobs/<job-id>
 ```
 
@@ -31,7 +33,7 @@ JOB=frameo-jobs/<job-id>
 
 **0. Setup.** `whoami` (workspace pinned? Frameo connected?). If `job.frameo.project_id` is empty, call `list_projects(query=<title>)` first; create a project and module only if none match, then record the ids. Run `$CHECK validate $JOB/relay.json --scratch`.
 
-**1. References, voices, style.** (Check each chosen voice exists in the pinned workspace. If the user keeps personal defaults, apply them: `../script-injector/references/user-defaults.md`; craft rules for every story: `../script-injector/references/prompt-quality-rules.md`.) Use `get_skill("character-sheet")` / `get_skill("story-assets")` for cast, places and props, `get_skill("continuity-check")` before a many-shot job, `get_skill("audio-prompting")` and `search_voices` for voices, `save_character` for saved faces. If `style` has no approved reference yet and the owner wanted options, make 2 to 3 cheap test stills and let them pick. Quote with `estimate_cost`, generate with `confirmed_by_user` (inside the approval), `show_generations`, `wait_task`, `view_image` every result. Record media ids in `locks.items` and `style.reference_lock_ids`. Owner approves the set, then `$CHECK lock $JOB/relay.json`. Log every charge in `ledger.jsonl` (`{"kind","segment","credits_charged","generation_id","refunded"}`).
+**1. References, voices, style.** (Check each chosen voice exists in the pinned workspace. If the user keeps personal defaults, apply them: `$RELAY_HOME/skills/script-injector/references/user-defaults.md`; craft rules for every story: `$RELAY_HOME/skills/script-injector/references/prompt-quality-rules.md`.) Use `get_skill("character-sheet")` / `get_skill("story-assets")` for cast, places and props, `get_skill("continuity-check")` before a many-shot job, `get_skill("audio-prompting")` and `search_voices` for voices, `save_character` for saved faces. If `style` has no approved reference yet and the owner wanted options, make 2 to 3 cheap test stills and let them pick. Quote with `estimate_cost`, generate with `confirmed_by_user` (inside the approval), `show_generations`, `wait_task`, `view_image` every result. Record media ids in `locks.items` and `style.reference_lock_ids`. Owner approves the set, then `$CHECK lock $JOB/relay.json`. Log every charge in `ledger.jsonl` (`{"kind","segment","credits_charged","generation_id","refunded"}`).
 
 **2. Keyframes.** One start still per chain (the first segment's first frame), in the style anchor, from the locked references (`get_skill("image-prompting")`; respect the image models' aspect set and the 0.4 to 2.5 width/height rule). Dispatch `scene-prep` subagents in parallel, one per chain, to seal prompts and judge the stills (Step 4 procedure). Owner approves the stills.
 
@@ -52,7 +54,7 @@ JOB=frameo-jobs/<job-id>
 **7. Audit and hand over.** `$CHECK ledger $JOB/relay.json` (must pass; compare with the balance change in `whoami`, drop duplicate rows, mark refunded failures `refunded: true`), then `$CHECK manifest $JOB/relay.json > $JOB/manifest.json`. Mirror a short summary with `save_note(path="/relay/summary")` between runs (best effort: it is refused while a run is going). Assembly is `frameorelay:finish-cut` (clean cuts around morph zones, transitions, bubbles, captions, voices, music, effects, listen check); Frameo's `subtitles-and-cut` / `ffmpeg-recipes` cover one-off edits. Report: what was made, credits spent against the approved total, retakes, any join marked `high` motion or kept with a known flaw. Say what was skipped.
 
 ## Degraded modes
-- No parallel subagents (some clients, Cowork): do the `scene-prep` and `review` work yourself, in sequence; every check and the snapshot/ledger steps stay.
+- No parallel subagents (some clients, Cowork, or when the user has not asked your host to spawn them): do the `scene-prep` and `review` work yourself, in sequence; every check and the snapshot/ledger steps stay. In Codex, spawn one `frameorelay_scene_prep` or `frameorelay_review` agent per chain or segment when the user allows it (see `$RELAY_HOME/docs/hosts.md`).
 - A hook or tool is missing: say so and continue only if the rule it protects can still be kept by you.
 
 ## Done
