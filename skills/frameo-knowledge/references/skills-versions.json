@@ -1,0 +1,23 @@
+{
+  "_comment": "Versions of Frameo built-in skills as last read. Refresh with the frameo-knowledge skill: list_skills is free; re-read only skills whose version changed.",
+  "read_on": "2026-11-16",
+  "versions": {
+    "get-started": 7, "video-prompting": 9, "image-prompting": 10, "audio-prompting": 8, "ffmpeg-recipes": 8,
+    "ad-creatives": 8, "ad-remake": 16, "ad-variations": 9, "ai-persona": 9, "apply-design-feedback": 6,
+    "aspect-reframe": 9, "batch-photo-edit": 6, "brand-kit": 8, "brand-mockups": 8, "brand-story-explainer": 8,
+    "bulk-from-table": 7, "cast-swap": 12, "character-sheet": 16, "clay-explainer": 8, "continuity-check": 7,
+    "design-feedback": 4, "faceless-story-video": 17, "highlight-reel": 6, "hindi-redub": 8, "location-enhance": 7,
+    "make-skill": 1, "multi-cam-edit": 11, "portrait-retouch": 6, "presenter-overlay": 6, "product-fidelity": 6,
+    "product-photoshoot": 22, "reference-pacing": 5, "reference-remix": 15, "resize-for-social": 7, "review-shots": 18,
+    "script-to-video": 18, "shot-plan": 7, "sound-pass": 11, "static-ad": 15, "story-assets": 8, "storyboard-sheet": 10,
+    "subtitles-and-cut": 16, "talking-head-overlays": 6, "talking-presenter": 21, "thumbnail-set": 20,
+    "translate-on-screen-text": 8, "ugc-video": 22, "video-dub": 12, "video-podcast": 7, "video-recast": 12,
+    "video-script": 5, "viral-effect-video": 8, "voiceover-timing": 7, "voiceover-to-video": 13, "website-tour-ad": 9,
+    "what-if-shorts": 6
+  },
+  "deep_read": {
+    "_comment": "Skills whose full text was read and distilled into skills-map.md, with the version read. Empty means catalog-level only.",
+    "video-prompting/video-guide-seedance.md": 9,
+    "video-prompting/video-guide-seedance-dialogue.md": 9
+  }
+}

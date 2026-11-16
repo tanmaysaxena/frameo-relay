@@ -1,0 +1,15 @@
+{
+  "name": "frameo-relay",
+  "owner": { "name": "Tanmay Saxena" },
+  "metadata": { "description": "Marketplace for the frameorelay plugin: a validated relay for Frameo video jobs." },
+  "plugins": [
+    {
+      "name": "frameorelay",
+      "source": "./",
+      "description": "Frameo video relay: panel-writer, script-injector, conductor, scene-prep, review, finish-cut and frameo-knowledge skills plus a stdlib validator.",
+      "version": "0.2.0",
+      "license": "MIT",
+      "homepage": "https://github.com/tanmaysaxena/frameo-relay"
+    }
+  ]
+}

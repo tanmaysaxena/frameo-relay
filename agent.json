@@ -1,0 +1,12 @@
+{
+  "name": "frameorelay",
+  "version": "0.2.0",
+  "description": "Frameo video relay: panel-writer, script-injector, conductor, scene-prep, review, finish-cut and frameo-knowledge skills plus a stdlib validator (scripts/relay_check.py) that keeps parallel scene work continuous, on-style and inside the approved spend.",
+  "license": "MIT",
+  "entry_points": {
+    "start": "skills/script-injector",
+    "run": "skills/conductor",
+    "validator": "scripts/relay_check.py"
+  },
+  "distributable": "python scripts/build_distributable.py"
+}

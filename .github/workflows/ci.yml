@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install test dependency
+        run: python -m pip install pytest
+      - name: Tests
+        run: python -m pytest tests -q
+      - name: Skill index is up to date
+        run: python scripts/generate_skill_index.py --check
+      - name: Build the distributable and scan for private strings
+        run: python scripts/build_distributable.py

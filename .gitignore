@@ -1,0 +1,23 @@
+# job output, downloaded media, secrets
+frameo-jobs/
+*.mp4
+*.mov
+*.wav
+*.mp3
+*.png
+*.jpg
+*.jpeg
+*.webp
+!examples/*.png
+.env
+.env.*
+*.key
+*.pem
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# build output
+dist/
