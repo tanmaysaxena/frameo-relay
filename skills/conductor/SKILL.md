@@ -16,7 +16,7 @@ JOB=frameo-jobs/<job-id>
 
 ## Rules that never bend
 
-1. Nothing is generated before `approval.approved_at` is set. One up-front approval covers references, keyframe stills, clips, a 15% retake allowance and speech analysis. Spending past `approved_total_credits` needs a new owner yes.
+1. Nothing is generated before `approval.approved_at` is set. One up-front approval covers references, keyframe stills, clips, a retake allowance (`approval.retake_allowance_pct`, validator default 15, 30 proposed by the injector) and speech analysis. Spending past `approved_total_credits` needs a new owner yes.
 2. **Save the call before sending it.** Write `$JOB/calls/<call-id>.json` (exact arguments and every `quote_id`) first. If the outcome is unclear, **re-send the same call**; Frameo returns the same work marked replayed and charges nothing. Never take a new quote to recover: a new quote starts new work and charges again. A clip that runs 3 to 5 times its estimate is slow, not lost: wait, then replay, never re-quote.
 3. Media is identified by `media_id`, and quotes are bound to the exact links. **Never call `refresh_media_links` before a generate call**, and pass the same links that were quoted.
 4. `whoami` before every paid wave; the workspace must equal `job.workspace_id`. Never `switch_workspace` mid-job (it discards unredeemed quotes). If the credits are in another workspace, ask first, then re-pin the whole job (new project, voices re-checked; see gotchas).

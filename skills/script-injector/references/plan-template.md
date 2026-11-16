@@ -35,7 +35,7 @@ Speech bubbles: <who, how shown>. Narration caption boxes: <yes/no>. Nothing is 
 Music beds (mood, where they change), sound effects (cue, scene), ducked under speech, loudness -14 LUFS.
 
 ## Length and tiers
-Target <s>, maximum <s>. 480p draft cost <n>, 720p final cost <n>. Draft first; finals only after you have seen it.
+Target <s>, maximum <s>. 720p clips <n> (28 credits per second), 1080p upscale <n> (about 0.9 per second), retake allowance <30>% = <n>. Optional 480p draft pass <n> (13 per second, does not carry over): only if you want to judge the story before paying for 720p.
 
 ## Dialogue
 Lines from the script (kept exactly): ...
@@ -49,8 +49,8 @@ Lines from the script (kept exactly): ...
 
 ## Cost
 Rough floor from list_models: <credits_per_second x seconds>. The conductor quotes exactly with
-estimate_cost and asks for ONE up-front approval covering references, keyframes, clips, a 15%
-retake allowance and speech analysis. Nothing is generated before that approval.
+estimate_cost and asks for ONE up-front approval covering references, keyframes, clips, a retake
+allowance (30% proposed) and speech analysis. Nothing is generated before that approval.
 ```
 
 The scratch `relay.json` has the same content in the shape documented in

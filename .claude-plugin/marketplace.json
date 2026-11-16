@@ -7,7 +7,7 @@
       "name": "frameorelay",
       "source": "./",
       "description": "Frameo video relay: panel-writer, script-injector, conductor, scene-prep, review, finish-cut and frameo-knowledge skills plus a stdlib validator.",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "license": "MIT",
       "homepage": "https://github.com/tanmaysaxena/frameo-relay"
     }

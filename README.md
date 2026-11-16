@@ -4,7 +4,90 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script into a fini
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.3.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.3.1, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+
+## Credit economics: what this saves
+
+A finished 4:30 script-to-video film used to cost **65,000 to 80,000 credits** without this package. Three productions made with it cost **about 10,000 to 25,000 credits per 4:30 of film (about 17,000 on average)**:
+
+> ### ≈ 77% fewer credits on average, about 55,000 credits saved per 4:30 film
+> Range across the three productions: **66% to 86% saved** (≈ 47,800 to 62,500 credits).
+
+| Production | Finished film | Credits spent | Per 4:30 of film | Saved vs 65,000 | Saved vs 80,000 | Credits saved (vs 72,500 midpoint) |
+|---|---|---|---|---|---|---|
+| Run 1: 19-clip romance short (480p drafts, 720p, 1080p; style changed mid-run) | 4:38, 1080p | 25,399 | ≈ 24,700 | **62%** | **69%** | **≈ 47,800 (66%)** |
+| Run 2: 12-shot vertical film | 4:00, 1080p | ≈ 8,700 to 11,000 | ≈ 10,000 to 12,700 | **80% to 85%** | **84% to 88%** | **≈ 59,800 to 62,500 (83% to 86%)** |
+| Run 3: 17-shot hard-cut film, two user-requested retake rounds | 5:04, 1080p | ≈ 16,500 | ≈ 14,900 | **77%** | **81%** | **≈ 57,500 (79%)** |
+| **Average** | | | **≈ 17,000** | **≈ 74%** | **≈ 79%** | **≈ 55,500 (≈ 77%)** |
+| **Without the package** | 4:30 | 65,000 to 80,000 | 65,000 to 80,000 | | | |
+
+Per finished minute that is about 14,400 to 17,800 credits before, and 2,200 to 5,500 with the package. **A 4:30 film now budgets at roughly 8,600 to 14,700 credits** (from no retakes to heavy retake rounds); see the [budget table](docs/credit-economics.md#budgeting-a-job).
+
+Where the savings come from: finishing by **upscale** (about 243 credits for 270 s, against 19,440 for a native 1080p render), going **straight to 720p** instead of a separate 480p draft pass (which was 31% of Run 1's spend), **one approved total with quotes before every spend**, **fixing in the free edit** instead of regenerating, and **fixing references and keyframes first** (2 to 18 credits each, against 280 to 840 for the clip that depends on them). Method, per-item breakdown and caveats: [docs/credit-economics.md](docs/credit-economics.md).
+
+The 65,000 to 80,000 baseline is the maintainer's figure from earlier productions made without the package (no ledgers from those runs are kept here), and three runs is a small sample: read it as "against the baseline we experienced", not a controlled experiment.
+
+## The pipeline
+
+```mermaid
+flowchart LR
+  S[Story or script] --> P["panel-writer<br/>(optional, free)"]
+  P --> I["script-injector<br/>plan + validate (free)"]
+  S --> I
+  I --> G{"You approve<br/>the plan and a<br/>credit total"}
+  G --> C["conductor<br/>references, keyframes, clips<br/>(the only role that spends)"]
+  C <--> R["scene-prep + review<br/>subagents (free)"]
+  C --> F["finish-cut<br/>cut, bubbles, voices, music<br/>(free ffmpeg)"]
+  F --> U["upscale to 1080p<br/>(about 0.9 credit per second)"]
+  U --> V([Final video])
+```
+
+| # | Stage | Skill | What happens | Credits | You do |
+|---|---|---|---|---|---|
+| 1 | Story to shot tables | `panel-writer` (optional) | Turns a plain story into a panel script: style bible, one table per shot, checklist. Your words stay exact; invented lines are marked. | 0 | Read the shot tables, fix the story |
+| 2 | Plan | `script-injector` | Splits the script into chains and segments, builds cast, style anchor, sealed prompts, dialogue (invented lines flagged), validates it. | 0 | Answer a few questions; read the plan |
+| 3 | Approval | (you) | Plan shown with a cost estimate. Nothing is generated until you say yes and a total is quoted. | 0 | **Approve the plan and the credit total** |
+| 4 | References and keyframes | `conductor` | Character sheets, location plates, first and last frame stills for every shot. | 2 to 18 per image | Approve faces, look, outfits |
+| 5 | Clips | `conductor` + `scene-prep` and `review` subagents | Up to 10 clips per call render in parallel; every clip is reviewed on its real frames; one retake per bad shot. | 28 per second at 720p (about 840 per 30 s) | Wait; approve retakes |
+| 6 | Speech, music, effects | `conductor` | Voiced dialogue and narration, story-themed music, sound effects. | about 1 to 2 per line; small | Approve voices and lines |
+| 7 | Cut | `finish-cut` | Clean cut windows around bad seconds, bubbles, captions, halftone transitions, ducked mix, listen check. | 0, plus about 40 for the listen check | Watch the cut, request changes |
+| 8 | Finish | `finish-cut` + upscale | Approved 720p cut upscaled to 1080p; same audio mix. | about 0.9 per second | Take delivery |
+
+## Get started
+
+1. **Prerequisites:** an agent host that supports Agent Skills and MCP (Claude Code, Claude Cowork, OpenAI Codex, Gemini CLI, Cursor, ...), the [Frameo MCP](https://frameo.ai/mcp) connected and signed in as `frameo`, a Frameo workspace with credits, and Python 3.10+.
+2. **Install** for your host: [Claude Code, Codex, Gemini CLI, Cursor](#install) (details and MCP setup in [docs/hosts.md](docs/hosts.md)).
+3. **Start small.** Make a 30 to 60 second test first (about 840 to 1,700 credits at 720p) to see the look and the process before committing a full budget.
+4. **Say what you have.** A plain story or outline: "use the panel writer on this story". A script that already has shots, dialogue and sound: "use the script injector on this script". Answer its questions: shape and length, resolution, style, dialogue delivery and voices, music, language.
+5. **Approve the plan and a credit total.** Take the total from the [budget table](docs/credit-economics.md#budgeting-a-job), with headroom. The conductor will not spend past it without asking.
+6. **Review the rough cut**, ask for changes, then approve the upscale.
+
+References: [host guide](docs/hosts.md) · [credit economics](docs/credit-economics.md) · [skills index](SKILLS.md) · [`relay.json` schema](skills/conductor/references/relay-schema.md) · [sample `relay.json`](examples/relay.sample.json) · [example panel script](skills/panel-writer/references/example-panel-script.md) · [Frameo gotchas](skills/conductor/references/frameo-gotchas.md) · [content boundaries](skills/conductor/references/content-boundaries.md) · [defaults file example](examples/house-defaults.example.md).
+
+## What to expect
+
+- **Questions first, then a plan.** You answer a handful of questions and get a plan with the shots, cast, style anchor, every invented line in its own "Generated dialogue" section, what is *not* being generated, and a cost estimate. Nothing is generated and no credits move until you approve.
+- **Waiting.** Clips render in parallel (up to 10 per call) and take roughly 10 to 25 minutes each at 720p, so a wave of clips is about 15 to 25 minutes of waiting. The agent shows progress; you mostly make decisions between waves.
+- **Retakes are normal.** Plan for them: the three runs spent 30% (Run 2) to 80% (Run 3) extra on retakes the user asked for after seeing the cut. Fixes in the edit are free; a regenerated clip is 28 credits per second.
+- **The agent is strict about money.** Only the `conductor` spends; every paid call is saved before it is sent and replayed (never re-quoted) if the result is unclear; a clip refused by the content filter is refunded and rephrased once, never probed. The validator and ledger audit are checks, not a hard spending stop: for a hard limit, top up your wallet only to the approved total.
+- **Content boundaries.** Romantic or heated scenes are written to a sensuality ceiling you choose in words; nothing explicit is generated.
+- **What you get:** the finished video (hosted link, plus local files if you ask), the ledger of every credit spent, an ordered manifest, and the plan and shot tables as files in `./frameo-jobs/<job-id>/`.
+
+## What you change, and when
+
+The earlier a change is made, the cheaper it is. Change things at the first stage where they exist.
+
+| What you want to change | Best moment | Cost then | Cost if you wait |
+|---|---|---|---|
+| The story, a line, the length, the content ceiling | Before approval (stages 1 to 3) | free | a regenerated clip (28 credits per second) plus re-voicing |
+| Style, look, cast, voices, shot list | At plan approval (stage 3) | free | every affected clip regenerated |
+| A face, outfit, place or first/last frame | References and keyframes (stage 4) | 2 to 18 credits per image | 280 to 840 credits per dependent clip |
+| A shot that looks wrong | Clip review (stage 5) | one retake: 28 per second of that clip | the cut, speech and bubbles also redone |
+| A line's wording or voice | Speech (stage 6) | about 1 to 2 credits per line | re-timed bubbles and a re-cut of that shot |
+| Which seconds to show, speed, bubbles, transitions, mix, music level | The cut (stage 7) | **free** | n/a: do it here instead of regenerating |
+| Final resolution | Last (stage 8), only after the 720p cut is approved | about 0.9 credit per second | a native 1080p re-render costs 72 per second |
+
+Rules of thumb: approve references before keyframes, keyframes before clips, and the 720p cut before the upscale. Fix a look problem in the still, not in the clip. Fix timing and framing in the edit, not by retaking. Set the retake allowance with your own expectations (30% is a sensible default; 80% if you plan motion and fix passes).
 
 ## Works with
 
@@ -70,13 +153,13 @@ python scripts/install.py --host codex
 
 If your input is a plain story or outline rather than a shot table, start with "use the panel writer on this story"; it produces the panel script the script injector then reads.
 
-Say: "use the script injector on this script", paste or point at the script, and answer its few questions (shape and maximum length, 480p draft then 720p, style direction, dialogue mode and delivery (voiced, bubbles, both), narrator voice, music and effects, first and last frame per shot, language). It shows the plan, including a separate **Generated dialogue** section for every line it invented. Say yes and the conductor takes over. Job files live in `./frameo-jobs/<job-id>/` under the folder you are working in.
+Say: "use the script injector on this script", paste or point at the script, and answer its few questions (shape and maximum length, resolution (720p finished by upscale to 1080p is the cheap path), style direction, dialogue mode and delivery (voiced, bubbles, both), narrator voice, music and effects, first and last frame per shot, language). It shows the plan, including a separate **Generated dialogue** section for every line it invented. Say yes and the conductor takes over. Job files live in `./frameo-jobs/<job-id>/` under the folder you are working in.
 
 Want the same look, voices or music every time? Keep a defaults file: see `skills/script-injector/references/user-defaults.md` and `examples/house-defaults.example.md`.
 
 ## Cost and safety
 
-- **Nothing is generated before you approve a plan** and a quoted total. One up-front approval covers references, keyframes, clips, a 15% retake allowance and speech analysis. Spending past it needs a new yes from you.
+- **Nothing is generated before you approve a plan** and a quoted total. One up-front approval covers references, keyframes, clips, a retake allowance (30% is a sensible default; the validator's own default is 15%) and speech analysis. Spending past it needs a new yes from you.
 - Only the conductor may call a paid Frameo tool. Subagents use free tools only, and the conductor checks (by snapshot) that they touched nothing else.
 - Every paid call is saved before it is sent and recovered by re-sending the same call, never by taking a new quote (a new quote starts new work and charges again).
 - The validator and the audit are arithmetic and structure checks, not a hard spending stop. If you want a hard limit, top up the wallet only to the approved total.

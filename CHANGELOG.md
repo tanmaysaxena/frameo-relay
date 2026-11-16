@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 (2026-11-17): credit economics, pipeline and getting-started docs
+
+- README opens with the measured credit comparison (about 77% fewer credits on average, about 55,000 credits saved per 4:30 film, against the 65,000 to 80,000 baseline), the pipeline, how to get started, what to expect, and what to change and when. Full method, per-run table, cost breakdown, budget formula and caveats in `docs/credit-economics.md`.
+- Skills now default to 720p clips finished by upscale to 1080p (the ledgers show a separate 480p draft pass was 31% of one run's spend and did not carry over), propose a 30% retake allowance (real runs spent 30% to 80% on retakes), and quote a measured budget range in the plan.
+
 ## 0.3.0 (2026-11-17): works beyond Claude
 
 - Host-neutral skills: `${CLAUDE_PLUGIN_ROOT}` and relative `../` paths replaced by `$RELAY_HOME` (each skill opens with a Host note saying what it is on each host); tool-name and subagent fallbacks stated.

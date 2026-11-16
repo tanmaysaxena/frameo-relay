@@ -26,7 +26,7 @@ dialogue
                     source: script|generated, approved: bool}
 approval           (nothing is generated without it)
   approved_total_credits   references + keyframes + clips + retake allowance + analysis
-  retake_allowance_pct     default 15
+  retake_allowance_pct     default 15 (validator); real runs approved 30 and spent 30% to 80% on retakes: see docs/credit-economics.md
   approved_at              ISO timestamp
 locks
   locked_at, fingerprint   written by `lock`, checked by `verify-locks`
