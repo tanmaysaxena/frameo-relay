@@ -34,7 +34,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PREFIX = "frameorelay-"
 BUNDLE_DIRS = ["scripts", "skills", "agents", "examples", "docs"]
-BUNDLE_FILES = ["LICENSE", "README.md", "CHANGELOG.md"]
+BUNDLE_FILES = ["LICENSE", "NOTICE", "README.md", "CHANGELOG.md"]
 HOSTS = {
     "agents": {"user": "~/.agents/skills", "project": ".agents/skills"},
     "codex": {"user": "~/.agents/skills", "project": ".agents/skills",

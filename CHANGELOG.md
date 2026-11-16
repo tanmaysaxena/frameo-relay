@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0 (2026-11-17): Apache-2.0 license
+
+- Relicensed from MIT to the Apache License 2.0: `LICENSE` is the standard Apache-2.0 text, `NOTICE` carries the copyright line, and every manifest says `Apache-2.0`. Contributions are accepted under Apache-2.0 (see `CONTRIBUTING.md`).
+- Versions 0.2.0 to 0.3.1 were published under the MIT license and remain available under it for anyone who already has them; 0.4.0 and later are Apache-2.0.
+- No functional changes.
+
 ## 0.3.1 (2026-11-17): credit economics, pipeline and getting-started docs
 
 - README opens with the measured credit comparison (about 77% fewer credits on average, about 55,000 credits saved per 4:30 film, against the 65,000 to 80,000 baseline), the pipeline, how to get started, what to expect, and what to change and when. Full method, per-run table, cost breakdown, budget formula and caveats in `docs/credit-economics.md`.

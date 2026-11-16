@@ -163,3 +163,16 @@ def test_frontmatter_scalars_are_yaml_safe():
     for p in files:
         data = yaml.safe_load("\n".join(_frontmatter(p)))
         assert data.get("name") and data.get("description"), p
+
+
+def test_license_is_apache_everywhere():
+    """LICENSE is the standard Apache-2.0 text and every manifest agrees (a stale MIT field would mislead users)."""
+    import json
+    lic = open(os.path.join(ROOT, "LICENSE"), encoding="utf-8").read()
+    assert "Apache License" in lic and "Version 2.0, January 2004" in lic
+    assert "MIT License" not in lic
+    assert os.path.isfile(os.path.join(ROOT, "NOTICE"))
+    for rel in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json", "agent.json"):
+        assert json.load(open(os.path.join(ROOT, rel), encoding="utf-8"))["license"] == "Apache-2.0", rel
+    market = json.load(open(os.path.join(ROOT, ".claude-plugin", "marketplace.json"), encoding="utf-8"))
+    assert all(p.get("license") == "Apache-2.0" for p in market["plugins"] if "license" in p)

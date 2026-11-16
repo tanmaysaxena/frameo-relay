@@ -21,6 +21,10 @@ python scripts/build_distributable.py         # must print OK; it scans for priv
 
 Add or update a test in `tests/test_relay_check.py` when you change `scripts/relay_check.py` or `skills/finish-cut/scripts/`. Describe what you ran against a real Frameo job, if anything, and what it cost.
 
+## License of contributions
+
+By submitting a pull request you agree that your contribution is licensed under the Apache License 2.0 (section 5 of the license), the same as the rest of the project.
+
 ## Reporting a problem
 
 Open an issue with the skill involved, what you expected, what happened, and the relevant part of `relay.json` with ids removed. For security issues use [SECURITY.md](SECURITY.md) instead.

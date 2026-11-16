@@ -4,7 +4,7 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script into a fini
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.3.1, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.4.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
 
 ## Credit economics: what this saves
 
@@ -194,4 +194,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues as described in [
 
 ## License
 
-[MIT](LICENSE)
+[Apache License 2.0](LICENSE). Versions 0.2.0 to 0.3.1 were released under the MIT license; 0.4.0 and later are Apache-2.0 (see [NOTICE](NOTICE)).

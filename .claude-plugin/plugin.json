@@ -1,10 +1,10 @@
 {
   "name": "frameorelay",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A relay for Frameo video jobs: turn a script into a validated plan, then run many scenes in parallel without breaking continuity, style or the approved spend. Skills: panel-writer, script-injector, conductor, scene-prep, review, finish-cut, frameo-knowledge.",
   "author": { "name": "Tanmay Saxena" },
   "homepage": "https://github.com/tanmaysaxena/frameo-relay",
   "repository": "https://github.com/tanmaysaxena/frameo-relay",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "keywords": ["frameo", "video", "storyboard", "continuity", "multi-agent", "agent-skills", "codex"]
 }
