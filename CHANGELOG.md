@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1 (2026-11-17): scanned-PDF detection fix
+
+- `book_extract.py`: a successful `pdftotext` run counts as a read even when every page is blank, so a scanned book now gets the intended "no text layer, run OCR" message instead of a misleading "no PDF reader found" (found by CI on Windows). Regression test added.
+
 ## 0.5.0 (2026-11-17): whole books
 
 - New skill `book-breakdown`: give it a text-based book PDF and it finds the chapters (`book_extract.py`), sets each chapter's runtime proportional to its size (3 to 15 minutes by default) and flags tiny, thick and possibly heated chapters, builds one shared series bible (recurring characters with per-chapter variants, places, style, voices), creates one Frameo project with a Series Bible module and a **new module per chapter**, plans every chapter in parallel with subagents, asks the content ceiling per chapter, and ends in one book plan with a credit cap per chapter (runtime share plus 25% headroom).

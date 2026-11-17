@@ -77,7 +77,9 @@ def read_pdf_pages(path: str) -> list[str]:
     if shutil.which("pdftotext"):
         try:
             out = subprocess.run(["pdftotext", "-layout", "-enc", "UTF-8", path, "-"], capture_output=True, timeout=600)
-            if out.returncode == 0 and out.stdout.strip():
+            if out.returncode == 0:
+                # a successful run is a read even when every page is blank: has_text_layer() then reports a scanned book
+                # instead of this function falling through to "no reader found"
                 return out.stdout.decode("utf-8", errors="replace").split("\f")
         except (OSError, subprocess.SubprocessError):
             pass

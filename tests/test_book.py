@@ -495,3 +495,27 @@ def test_extract_never_deletes_foreign_files(tmp_path):
     with redirect_stdout(io.StringIO()):
         assert bx.main(["adjust", str(out), "--drop", "ch01"]) == 0
     assert mine.exists() and other.exists()
+
+
+def test_blank_pdftotext_output_is_a_read_not_a_failure(monkeypatch, tmp_path):
+    """A scanned PDF makes pdftotext succeed with blank pages; that must reach the 'no text layer' check, not
+    fall through to 'no PDF reader found' (this broke on Windows CI)."""
+    class Done:
+        returncode = 0
+        stdout = b"\n\f\n\f\n\f"
+
+    monkeypatch.setattr(bx.shutil, "which", lambda name: "pdftotext")
+    monkeypatch.setattr(bx.subprocess, "run", lambda *a, **k: Done())
+    pages = bx.read_pdf_pages(str(tmp_path / "x.pdf"))
+    assert len(pages) == 4 and bx.has_text_layer(pages) is False
+
+    class Failed:
+        returncode = 1
+        stdout = b""
+
+    monkeypatch.setattr(bx.subprocess, "run", lambda *a, **k: Failed())
+    monkeypatch.setitem(sys.modules, "pypdf", None)      # make `import pypdf` raise ImportError
+    monkeypatch.setitem(sys.modules, "fitz", None)
+    with pytest.raises(SystemExit) as exc:
+        bx.read_pdf_pages(str(tmp_path / "x.pdf"))
+    assert "no PDF reader found" in str(exc.value)
