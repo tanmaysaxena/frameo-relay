@@ -1,10 +1,14 @@
 # frameorelay
 
-A set of [Agent Skills](https://agentskills.io/) that turns a script into a finished video through the [Frameo](https://frameo.ai/mcp) MCP, with a validated contract that keeps many scenes **continuous, on-style and inside an approved budget**. It runs in **Claude Code and Claude Cowork, OpenAI Codex, and other agents that read `SKILL.md` skills** (Gemini CLI, Cursor, ...); see [Works with](#works-with).
+A set of [Agent Skills](https://agentskills.io/) that turns a script, **or a whole book**, into finished videos through the [Frameo](https://frameo.ai/mcp) MCP, with a validated contract that keeps many scenes **continuous, on-style and inside an approved budget**. It runs in **Claude Code and Claude Cowork, OpenAI Codex, and other agents that read `SKILL.md` skills** (Gemini CLI, Cursor, ...); see [Works with](#works-with).
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
 Status: v0.5.1, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+
+> **New in 0.5: whole books.** Give it a book PDF and `book-breakdown` finds the chapters, sets each chapter's film length from its size (3 to 15 minutes), builds one shared series bible (recurring characters, places and style), gives **every chapter its own new Frameo module** in one project, plans all chapters **in parallel**, and ends in one book plan with a credit cap per chapter. [Read the whole-book pipeline](#whole-books-the-book-breakdown-pipeline) or say *"use the book breakdown on this PDF"*.
+
+**Jump to:** [Credit economics](#credit-economics-what-this-saves) · [Pipeline (one script)](#the-pipeline) · [**Whole books**](#whole-books-the-book-breakdown-pipeline) · [Get started](#get-started) · [What to expect](#what-to-expect) · [What you change, and when](#what-you-change-and-when) · [Install](#install) · [Works with Codex, Gemini CLI, Cursor](#works-with)
 
 ## Credit economics: what this saves
 
@@ -23,7 +27,7 @@ A finished 4:30 script-to-video film used to cost **65,000 to 80,000 credits** w
 
 Per finished minute that is about 14,400 to 17,800 credits before, and 2,200 to 5,500 with the package. **A 4:30 film now budgets at roughly 8,600 to 14,700 credits** (from no retakes to heavy retake rounds); see the [budget table](docs/credit-economics.md#budgeting-a-job).
 
-Where the savings come from: finishing by **upscale** (about 243 credits for 270 s, against 19,440 for a native 1080p render), going **straight to 720p** instead of a separate 480p draft pass (which was 31% of Run 1's spend), **one approved total with quotes before every spend**, **fixing in the free edit** instead of regenerating, and **fixing references and keyframes first** (2 to 18 credits each, against 280 to 840 for the clip that depends on them). Method, per-item breakdown and caveats: [docs/credit-economics.md](docs/credit-economics.md).
+Where the savings come from: finishing by **upscale** (about 243 credits for 270 s, against 19,440 for a native 1080p render), going **straight to 720p** instead of a separate 480p draft pass (which was 31% of Run 1's spend), **one approved total with quotes before every spend**, **fixing in the free edit** instead of regenerating, and **fixing references and keyframes first** (2 to 18 credits each, against 280 to 840 for the clip that depends on them). Method, per-item breakdown and caveats: [docs/credit-economics.md](docs/credit-economics.md). Planning a whole book? Budget it chapter by chapter: [book-scale costs](#whole-books-the-book-breakdown-pipeline) and [the book budgeting formula](docs/credit-economics.md#budgeting-a-whole-book).
 
 The 65,000 to 80,000 baseline is the maintainer's figure from earlier productions made without the package (no ledgers from those runs are kept here), and three runs is a small sample: read it as "against the baseline we experienced", not a controlled experiment.
 
