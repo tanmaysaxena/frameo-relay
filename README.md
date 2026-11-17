@@ -4,7 +4,7 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script into a fini
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.4.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.5.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
 
 ## Credit economics: what this saves
 
@@ -28,6 +28,8 @@ Where the savings come from: finishing by **upscale** (about 243 credits for 270
 The 65,000 to 80,000 baseline is the maintainer's figure from earlier productions made without the package (no ledgers from those runs are kept here), and three runs is a small sample: read it as "against the baseline we experienced", not a controlled experiment.
 
 ## The pipeline
+
+*Starting from a whole book rather than one script? Jump to [Whole books](#whole-books-the-book-breakdown-pipeline).*
 
 ```mermaid
 flowchart LR
@@ -58,7 +60,7 @@ flowchart LR
 1. **Prerequisites:** an agent host that supports Agent Skills and MCP (Claude Code, Claude Cowork, OpenAI Codex, Gemini CLI, Cursor, ...), the [Frameo MCP](https://frameo.ai/mcp) connected and signed in as `frameo`, a Frameo workspace with credits, and Python 3.10+.
 2. **Install** for your host: [Claude Code, Codex, Gemini CLI, Cursor](#install) (details and MCP setup in [docs/hosts.md](docs/hosts.md)).
 3. **Start small.** Make a 30 to 60 second test first (about 840 to 1,700 credits at 720p) to see the look and the process before committing a full budget.
-4. **Say what you have.** A plain story or outline: "use the panel writer on this story". A script that already has shots, dialogue and sound: "use the script injector on this script". Answer its questions: shape and length, resolution, style, dialogue delivery and voices, music, language.
+4. **Say what you have.** A whole book (a text-based PDF): "use the book breakdown on this PDF". A plain story or outline: "use the panel writer on this story". A script that already has shots, dialogue and sound: "use the script injector on this script". Answer its questions: shape and length, resolution, style, dialogue delivery and voices, music, language.
 5. **Approve the plan and a credit total.** Take the total from the [budget table](docs/credit-economics.md#budgeting-a-job), with headroom. The conductor will not spend past it without asking.
 6. **Review the rough cut**, ask for changes, then approve the upscale.
 
@@ -89,6 +91,54 @@ The earlier a change is made, the cheaper it is. Change things at the first stag
 
 Rules of thumb: approve references before keyframes, keyframes before clips, and the 720p cut before the upscale. Fix a look problem in the still, not in the clip. Fix timing and framing in the edit, not by retaking. Set the retake allowance with your own expectations (30% is a sensible default; 80% if you plan motion and fix passes).
 
+## Whole books: the book-breakdown pipeline
+
+Give it an entire book (a text-based PDF) and `frameorelay:book-breakdown` finds the chapters, sets each chapter's film length from its size, builds **one shared series bible** (recurring characters, places and style), gives **every chapter its own new Frameo module** in one project, and plans all the chapters **in parallel**. You get one book plan with a credit cap per chapter. Nothing is generated and no credit is spent until you approve.
+
+```mermaid
+flowchart TB
+  B[Book PDF] --> X["book_extract<br/>chapters, runtimes, flags"]
+  X --> Q{"You confirm the<br/>breakdown"}
+  Q --> S["bible-scout, one per chapter<br/>(parallel, free)"]
+  S --> G["Series bible<br/>recurring cast, places, style, voices"]
+  G --> M["One Frameo project:<br/>Series Bible module +<br/>a new module per chapter"]
+  M --> P["chapter-planner, one per chapter<br/>panel script + validated plan<br/>(parallel, free)"]
+  P --> T{"You choose a content ceiling<br/>per chapter and approve<br/>the book budget"}
+  T --> C["conductor, book mode<br/>bible assets once, then chapters<br/>in waves under per-chapter caps"]
+  C --> D["Chapter films<br/>+ book cost dashboard"]
+```
+
+| # | Stage | What happens | Credits | You do |
+|---|---|---|---|---|
+| 1 | Extract | Reads the PDF, drops running headers, finds the chapter breakpoints, sets each chapter's runtime (proportional to its words, between 3 and 15 minutes by default), flags chapters that are too tiny, too thick or possibly heated. | 0 | Confirm the table; decide merges and splits |
+| 2 | Scout | One subagent per chapter, in parallel, lists characters (with looks and state), places, props and heated passages. | 0 | |
+| 3 | Series bible | Merges the scouts into recurring cast with per-chapter outfit/state variants, places, style anchor and voices. | 0 | Review and edit the bible |
+| 4 | Frameo structure | One project for the book: a `Series Bible` module and a new module per chapter. | 0 | |
+| 5 | Chapter plans | One subagent per chapter, in parallel, writes a panel script and a validated plan that points at the shared bible. | 0 | |
+| 6 | Book plan | One table: runtime, shots, estimated credits, generated lines, cap per chapter, book total against your budget. | 0 | **Choose each chapter's content ceiling; approve the budget** |
+| 7 | Production | The conductor builds the bible assets once, copies them into each chapter's module, then produces chapters in waves under their caps. | per the budget | Review each chapter's cut |
+
+**Defaults you can rely on**
+- **Every chapter takes its own new module** (never the bible module, never shared unless you say so and give a reason). `book_check.py validate` enforces it.
+- **Recurring characters and places are made once and shared.** Characters live in the project's cast, which every module sees (Frameo allows 30 per project). Places, props and the style reference are copied into each chapter module for free. One-off assets stay inside their chapter. A character can change look (outfit, injury, age) through per-chapter variants of one locked face.
+- **Dialogue stays exact, prose is condensed and marked `[adapted]`.** Each chapter's panel script ends with a table of what the film leaves out, so you can ask for a scene back before any credit is spent.
+- **Runtime is proportional to chapter size, 3 to 15 minutes by default.** Tiny and thick chapters are flagged and you choose: merge or split into parts.
+- **The content ceiling is asked for every chapter**, in words. Nothing explicit is generated and the moderation filter is never probed.
+- **Parallel means the free stages.** Paid generation runs in waves under one book budget with a cap per chapter (its runtime share plus 25% headroom), and `book_check.py budget` is the book's cost dashboard: spent, cap and remaining per chapter.
+- **Text-based PDFs only.** Scanned books are refused with a message to run OCR first. Needs poppler's `pdftotext` or `pip install pypdf`.
+
+**What a book costs.** Credits scale with runtime: about 28 per second of film at 720p for the first take, plus retakes, plus about 0.9 per second for the 1080p upscale and about 800 for references and sound. These are projections from per-second rates and the retake shares measured on single films; no whole book has been produced yet.
+
+| Chapter film | First take | With 30% retakes | Example book | Rough total |
+|---|---|---|---|---|
+| 3:00 (the minimum) | 5,040 | ≈ 7,500 | 12 chapters averaging 4:00 | ≈ 117,000 |
+| 5:00 | 8,400 | ≈ 12,000 | 20 chapters averaging 5:00 | ≈ 240,000 |
+| 15:00 (the maximum) | 25,200 | ≈ 34,400 | 10 chapters averaging 8:00 | ≈ 187,000 |
+
+Set the book budget from [the budget formula](docs/credit-economics.md#budgeting-a-whole-book) with headroom, start with one or two chapters to see the look and the real numbers, and let the per-chapter caps stop any one chapter from eating the rest.
+
+Start it with: *"use the book breakdown on this PDF"*. Full contract, file formats and subagent briefs: [skills/book-breakdown](skills/book-breakdown/SKILL.md).
+
 ## Works with
 
 | Host | Install | Tested by the author |
@@ -104,6 +154,7 @@ The skills, the validator and the edit builders are host-neutral; only the insta
 
 | Skill | Role |
 |---|---|
+| `frameorelay:book-breakdown` | Give it a whole book (text-based PDF). It finds the chapters, sets each chapter's runtime from its size (3 to 15 minutes by default), builds one shared series bible, gives **every chapter its own new Frameo module** in one project, and plans all chapters in parallel with subagents (`bible-scout`, `chapter-planner`), ending in one book plan with a cap per chapter. Never spends credits. See [Whole books](#whole-books-the-book-breakdown-pipeline). |
 | `frameorelay:panel-writer` | Optional first step for a plain story or outline. Turns it into a production **panel script**: a global style bible, then one table per shot (length, join, setup, cast, camera, visual, dialogue, narration, sound) and a checklist, so every shot is a self-contained work order. Keeps the author's words exact, marks every invented line, checks the result with `skills/panel-writer/scripts/panel_check.py`. Never spends credits. |
 | `frameorelay:script-injector` | You share a script. It splits it into scenes and chains, builds the cast, style direction and sealed prompts, writes clearly marked dialogue where the script has none, validates the plan, shows it, and on your yes starts the conductor. Never spends credits. |
 | `frameorelay:panel-writer` | Your script is just a story, not a per-shot table. It cuts the story into shots and writes the production panel script: a style bible, then one table per shot (length, join, setup, cast, camera, visual prompt, dialogue bubbles, narration, SFX, BGM, AI-fill and owner-fill columns) and a sign-off checklist, so parallel agents get self-contained work orders. Keeps your words exact, marks invented lines, validates the result with `skills/panel-writer/scripts/panel_check.py`. Never spends credits. |
@@ -121,6 +172,7 @@ The skills, the validator and the edit builders are host-neutral; only the insta
 - The Frameo MCP connected and signed in, registered as `frameo` (`https://mcp.frameo.ai/mcp`). Claude Code: `claude mcp add --transport http frameo https://mcp.frameo.ai/mcp`. Codex: `codex mcp add frameo --url https://mcp.frameo.ai/mcp` then `codex mcp login frameo`. Other hosts: add it as a streamable-HTTP server in their MCP settings.
 - Python 3.10+ (for the validator and the edit builder; tested on 3.10 and 3.13).
 - A Frameo workspace with credits.
+- For whole books only: a PDF reader for text-based PDFs (poppler's `pdftotext`, or `pip install pypdf`).
 
 ## Install
 

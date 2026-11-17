@@ -36,3 +36,6 @@ Mark a join "match" without having viewed both real frames; edit anything outsid
 - Fail a frame with a visible brand logo or emblem (laptop, bottle, car), an unrequested border or paper margin, mismatched shoes or hands, or a missing safety item the setting needs (a seatbelt).
 - If the conductor gives you the `analyze_media` transcript, check it against the plan: a bound line that plays twice, a line invented for the other character, a voice in a clip meant to be silent, or a line far from its planned time. Report the seconds; the conductor trims or gates it.
 - `view_image` takes `media_url` and `at_seconds` and returns one frame of any video under 100 MB; `extract_frames` only returns the first and last frame. For dialogue clips add `"lines":[{"id","frame_second","faces":[[x0,y0,x1,y1]],"speaker_face":0}]` (canvas pixels, read off the frame) so the edit can place bubbles.
+
+## Book chapters
+For a chapter of a book (`series` block), also check each recurring character against the bible sheet and the chapter's variant (face, hair, build, outfit state) and each recurring place against its plate; a drifted recurring face fails the shot and is cited with both frames.

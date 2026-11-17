@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0 (2026-11-17): whole books
+
+- New skill `book-breakdown`: give it a text-based book PDF and it finds the chapters (`book_extract.py`), sets each chapter's runtime proportional to its size (3 to 15 minutes by default) and flags tiny, thick and possibly heated chapters, builds one shared series bible (recurring characters with per-chapter variants, places, style, voices), creates one Frameo project with a Series Bible module and a **new module per chapter**, plans every chapter in parallel with subagents, asks the content ceiling per chapter, and ends in one book plan with a credit cap per chapter (runtime share plus 25% headroom).
+- New subagent roles `bible-scout` and `chapter-planner` (no Frameo tools, free); the installer writes them as Codex custom agents too.
+- `book_check.py`: `init`, `validate` (own module per chapter, cast limit of 30, ceilings, caps, each chapter's `relay.json`), `allocate`, `budget` (book cost dashboard across chapter ledgers) and `sync-plan` (the free `import_media_url` and `save_character` calls that share the bible).
+- `relay.json` gains an optional `series` block and `shared_from` / `variant_of` on locks; `relay_check.py` validates them. Single-script jobs are unchanged. Small additions to `conductor` (book mode), `panel-writer`, `script-injector`, `scene-prep`, `review` and `frameo-knowledge` (project, module and cast facts).
+- README: whole-book pipeline, defaults and book-scale cost projections (not yet measured on a whole book).
+
 ## 0.4.0 (2026-11-17): Apache-2.0 license
 
 - Relicensed from MIT to the Apache License 2.0: `LICENSE` is the standard Apache-2.0 text, `NOTICE` carries the copyright line, and every manifest says `Apache-2.0`. Contributions are accepted under Apache-2.0 (see `CONTRIBUTING.md`).

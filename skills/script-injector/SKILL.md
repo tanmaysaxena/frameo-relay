@@ -44,6 +44,9 @@ Skip anything the user already said, a saved `/brief` note already settled, or t
 8. **Wait for a real yes.** A change request means edit the scratch draft and show it again. Never treat silence or "sounds good" about the idea as approval of the plan shown.
 9. **On yes:** create `frameo-jobs/<job-id>/` (in the working folder, or where the owner said) and copy `relay.json` and `plan.md` into it. Then invoke `frameorelay:conductor` with the job folder. If the owner asked to stop early (for example after keyframes), pass that as `through`.
 
+## Series chapters (a chapter planned by book-breakdown)
+If a `series` block or a book brief is present, do not re-ask the style, cast or voices: take them from `book/bible.json`. Put `shared_from: "bible:<id>"` (and `variant_of` for an outfit or state variant) on every lock the bible covers, set `job.frameo.module_id` to the chapter's own module, write the chapter's content ceiling into `style.avoid`, and set `approval.approved_total_credits` to the chapter's cap only after the user approves. The user sees all chapters together in the book plan, not one by one. See `$RELAY_HOME/skills/book-breakdown/SKILL.md`.
+
 ## Done
 
 The owner has a validated, approved plan in `frameo-jobs/<job-id>/`, every invented line was shown and flagged, no credit was spent by this skill, and the conductor has been started (or the owner chose to stop at the plan).

@@ -6,8 +6,8 @@
     {
       "name": "frameorelay",
       "source": "./",
-      "description": "Frameo video relay: panel-writer, script-injector, conductor, scene-prep, review, finish-cut and frameo-knowledge skills plus a stdlib validator.",
-      "version": "0.4.0",
+      "description": "Frameo video relay: book-breakdown, panel-writer, script-injector, conductor, scene-prep, review, finish-cut and frameo-knowledge skills plus a stdlib validator.",
+      "version": "0.5.0",
       "license": "Apache-2.0",
       "homepage": "https://github.com/tanmaysaxena/frameo-relay"
     }

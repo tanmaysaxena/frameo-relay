@@ -57,7 +57,8 @@ def test_install_codex_layout(tmp_path):
     assert "frameorelay-conductor" in text
     # two Codex agent files
     tomls = sorted(p.name for p in a.glob("*.toml"))
-    assert tomls == ["frameorelay_review.toml", "frameorelay_scene_prep.toml"]
+    assert tomls == ["frameorelay_bible_scout.toml", "frameorelay_chapter_planner.toml",
+                     "frameorelay_review.toml", "frameorelay_scene_prep.toml"]
 
 
 def test_codex_agent_toml_parses(tmp_path):

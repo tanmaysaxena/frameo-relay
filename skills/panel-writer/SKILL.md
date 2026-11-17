@@ -49,6 +49,9 @@ Use this skill when the input is prose, a synopsis, a scene list without camera 
    (machine-readable shots, cast, line ids; the script-injector reads it directly). Show the owner the shot list (id, title, length, join), the generated additions, anything you were unsure about (joins, ceiling, lengths), and ask for changes or a yes. A change means edit the markdown and re-run the check.
 10. **Hand off.** On the owner's yes, offer `frameorelay:script-injector` with the panel script as the script. The mapping it uses: shot = scene, `Join` = chain, `Length` = segment seconds, `Setup` and `Cast` = locks, `Camera` + `Visual prompt` = the sealed prompt, `Dialogue bubbles` = dialogue lines (ids `l01`, `l02`... in order; `[generated]` = `source: "generated"`), `Narration (VO)` = the narrator's lines, `SFX` and `BGM` = the sound plan. The AI Fill and User Fill columns stay blank: the relay writes status there, the owner approves there.
 
+## Book mode (a chapter with a series bible)
+When the input is one chapter of a book (a `series` block, or a `chapter-planner` brief): use the names, base looks and variants in `book/bible.json` verbatim; take the runtime from `book/book.json`; keep dialogue exact and condense prose into narration lines marked `[adapted]`; end the panel script with an **Omitted from the chapter** table (passage and page range, why it was cut, whether a narration line stands in). Full rules: `$RELAY_HOME/skills/book-breakdown/references/adaptation-rules.md`.
+
 ## Done
 
 A validated `.panel.md` (and `.panels.json`) the owner has seen; every invented word is marked and listed; no credit was spent; the owner knows the next step is the script-injector.

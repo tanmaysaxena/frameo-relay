@@ -68,6 +68,23 @@ The 800 covers references, keyframes, speech, music, sound effects and analysis 
 
 Set the approved total from that table with some headroom; the conductor will not spend past it without asking. Test a 30 to 60 second piece first (about 840 to 1,700 credits at 720p) to see the look before committing the whole budget.
 
+## Budgeting a whole book
+
+The same formula applies per chapter, with the chapter's runtime in seconds (3 to 15 minutes by default, proportional to its word count):
+
+`chapter total ≈ runtime_s × 28 × (1 + retake share) + runtime_s × 0.9 + about 800`
+
+| Chapter film | First take (runtime_s × 28) | With 30% retakes, upscale and overhead |
+|---|---|---|
+| 3:00 | 5,040 | ≈ 7,500 |
+| 5:00 | 8,400 | ≈ 12,000 |
+| 8:00 | 13,440 | ≈ 18,700 |
+| 15:00 | 25,200 | ≈ 34,400 |
+
+A book is the sum: 12 chapters averaging 4:00 come to about 117,000 credits, 20 chapters averaging 5:00 to about 240,000, 10 chapters averaging 8:00 to about 187,000. In book mode the budget is split into per-chapter caps by runtime share (cap = `budget × runtime / total runtime × 1.25`; the 25% headroom is per chapter and not carried over) and `book_check.py budget` reports spent, cap and remaining per chapter and for the book.
+
+These are projections from the per-second rates and the retake shares measured on single films (30% to 80%). No whole book has been produced with the package yet, so they carry no measured savings claim: the per-film savings above should compound across chapters, but that is not yet measured. The Series Bible assets (character sheets, place plates, style reference) cost a few hundred credits once and are shared by every chapter, which is cheaper than re-making them per chapter.
+
 ## Caveats
 
 - The 65,000 to 80,000 baseline is the maintainer's figure from earlier productions made without the package; no ledgers from those runs are kept here. Treat the savings as "against the baseline the maintainer experienced", not as a controlled experiment.

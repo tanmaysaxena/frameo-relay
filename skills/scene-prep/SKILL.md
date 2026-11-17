@@ -45,3 +45,6 @@ Touch `relay.json`, another chain's folder, `ledger.jsonl` or `calls/`; call any
 - **Bound lines:** the model starts a bound line late or early, may play it again after it ends, and may invent a reply for the other character. After the last bound line write "nobody speaks" and give the remaining seconds no dialogue action; flag in `concerns` that the conductor must measure the line and may need to trim the clip.
 - **Silhouette and cutaway shots** (no lips visible): do NOT bind the speech. Seal the prompt as silent ("nobody speaks, a voice is added later; room tone and the clock only") and tell the conductor to lay the speech file in the edit at chosen times; list the intended times.
 - **Devices and props:** name them blank ("lid completely blank, no logo, no emblem") and write safety gear (seatbelt) into the sentence when the setting needs it.
+
+## Book chapters
+For a chapter of a book (`series` block), the recurring cast and places are the bible's: judge keyframes against the chapter module's copies of the bible sheets, use the right outfit or state variant for this chapter, and never accept a different face for a recurring character.

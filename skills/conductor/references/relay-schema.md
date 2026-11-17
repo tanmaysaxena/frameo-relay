@@ -61,3 +61,14 @@ Companion files in the job folder: `plan.md` (the approved plan), `calls/<id>.js
 - That a `media_id` exists in Frameo, or that a generated clip matches its frame. The conductor checks with Frameo's tools; reviewers look at the real frames.
 - That a join looks right. It proves both real edge frames were cited, not that the verdict is correct.
 - Spend is held by who may spend (conductor only), per-wave quotes checked by `check-ready`, and a post-wave `ledger` audit. It is not a hard stop inside a running call. For one, put only the approved total in the wallet.
+
+## Optional `series` block (a chapter of a book)
+Added by the book-breakdown skill. Absent for a normal single job; nothing else changes.
+
+```
+series                  {book_id, chapter_id, chapter_no, bible: path to book/bible.json, bible_module_id?}
+locks.items[]           optional shared_from "bible:<id>" (an asset made once in the Series Bible module and copied into
+                        this chapter's module) and variant_of "bible:<id>" (an outfit or state variant of a base look)
+```
+Rules the validator enforces: `book_id`, `chapter_id`, `bible` and an integer `chapter_no` >= 1 are present; the chapter's
+`job.frameo.module_id` is its own and never the bible module; `shared_from` and `variant_of` look like `bible:<id>`.

@@ -207,9 +207,46 @@ def check_structure(d: dict, scratch: bool) -> Report:
         elif not is_nonempty_str(item.get("media_id")):
             (r.warn if scratch else r.fail)(f"lock {iid}: no media_id yet")
 
+    r.merge(check_series(d, scratch=scratch))
     r.merge(check_chains(d, scratch=scratch))
     r.merge(check_style(d, scratch=scratch))
     r.merge(check_dialogue(d, require_approved=not scratch))
+    return r
+
+
+SHARED_RE = re.compile(r"^bible:[a-z0-9][a-z0-9_-]*$")
+
+
+def check_series(d: dict, scratch: bool) -> Report:
+    """Optional `series` block for a chapter of a book (see skills/book-breakdown). Absent means a normal single job."""
+    r = Report()
+    ser = d.get("series")
+    items = lock_items(d)
+    if ser is None:
+        for item in items:
+            if "shared_from" in item or "variant_of" in item:
+                r.warn(f"lock {item.get('id')}: shared_from/variant_of only make sense with a `series` block")
+        return r
+    if not isinstance(ser, dict):
+        r.fail("series must be an object")
+        return r
+    for key in ("book_id", "chapter_id", "bible"):
+        if not is_nonempty_str(ser.get(key)):
+            r.fail(f"series.{key} missing")
+    no = ser.get("chapter_no")
+    if not isinstance(no, int) or isinstance(no, bool) or no < 1:
+        r.fail("series.chapter_no must be an integer >= 1")
+    frameo = (d.get("job") or {}).get("frameo") or {}
+    bible_mod = ser.get("bible_module_id")
+    if is_nonempty_str(bible_mod) and bible_mod == frameo.get("module_id"):
+        r.fail("a chapter job must not use the Series Bible module: every chapter takes its own module")
+    if not scratch and not is_nonempty_str(frameo.get("module_id")):
+        r.fail("a chapter job needs its own job.frameo.module_id")
+    for item in items:
+        for key in ("shared_from", "variant_of"):
+            v = item.get(key)
+            if v is not None and not (isinstance(v, str) and SHARED_RE.match(v)):
+                r.fail(f"lock {item.get('id')}: {key} must look like 'bible:<id>', got {v!r}")
     return r
 
 
