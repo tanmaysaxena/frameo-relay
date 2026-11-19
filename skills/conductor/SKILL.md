@@ -29,6 +29,8 @@ JOB=frameo-jobs/<job-id>
 12. A `run_ffmpeg` that fails with `The sandbox is unavailable` or `staging block transport failed` is an infrastructure error with nothing charged: resend the identical job once. A joined-audio job once sat `running` for 90 minutes and blocked the module (`module_busy`): plan the audio join as soon as the clips exist and never queue another analysis behind it.
 9. Heated or romantic scenes obey the script's sensuality ceiling and `references/content-boundaries.md`: no probing the moderation filter, no escalate-then-step-down retries, one pre-written softer fallback per heated segment.
 
+12. **Style charter gate.** Before a chapter is called done, re-read the series style charter (`STYLE-CHARTER.md` at the book root, written at the first plan): bubbles with name tags on every dialogue line (lipsync never replaces them), caption boxes, the transition rules (halftone in all directions; zoom-in + fade for scene changes), and the art-style language. A chapter without them is not finished. Never read an owner's "also do X" as "instead of Y": ask.
+
 ## Steps
 
 **0. Setup.** `whoami` (workspace pinned? Frameo connected?). If `job.frameo.project_id` is empty, call `list_projects(query=<title>)` first; create a project and module only if none match, then record the ids. Run `$CHECK validate $JOB/relay.json --scratch`.
@@ -61,6 +63,9 @@ When `relay.json` has a `series` block, the job is one chapter of a book planned
 - **Locks:** a lock with `shared_from: "bible:<id>"` is the bible's asset copied into this module; use the chapter module's copy as the reference. An outfit or state variant also carries `variant_of`. New variants a chapter needs are made in that chapter and reported to the main session for the bible.
 - **Caps and waves:** the chapter's `approval.approved_total_credits` is its cap from `book/book.json`; never spend past it. Interleave chapters wave by wave; no more than `job.max_parallel` calls in flight in total. Before every wave run `python "$RELAY_HOME/skills/book-breakdown/scripts/book_check.py" budget book/book.json`; it exits 1 when a chapter is over its cap or the book is over its total, and a chapter at its cap waits for the user.
 - **Ledgers:** each chapter keeps its own `ledger.jsonl`; the bible module's spend goes in `frameo-jobs/<book-id>/bible/ledger.jsonl`.
+
+- **Playbook:** `$RELAY_HOME/skills/book-breakdown/references/production-playbook.md` holds what worked on the first full book: scene-master continuity repair, lipsync recipe, closing every chapter with audio, parallel per-chapter workers.
+- **Scripts:** `$RELAY_HOME/skills/conductor/references/book-production-scripts.md` describes `chapter_driver.py` (keyframe, clip, retake and speech calls split into estimate and generate, state and ledger recording), `lipsync_plan.py` and `skills/finish-cut/scripts/cut_builder.py` (picture parts, voice track, music beds, final join). Use them for any job with dozens of shots, not only books.
 
 ## Degraded modes
 - No parallel subagents (some clients, Cowork, or when the user has not asked your host to spawn them): do the `scene-prep` and `review` work yourself, in sequence; every check and the snapshot/ledger steps stay. In Codex, spawn one `frameorelay_scene_prep` or `frameorelay_review` agent per chain or segment when the user allows it (see `$RELAY_HOME/docs/hosts.md`).

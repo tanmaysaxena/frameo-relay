@@ -102,3 +102,13 @@ Re-check before relying on any of it: the MCP changes. Sources are the tool desc
 - Content-policy refusals on a narration line charge nothing; drop or adapt the line once, never probe.
 - Edit a keyframe with `generate_images` (nano-banana-pro, 18 credits, the old still as `image_urls`, "change only X"): removes logos and borders, adds missing safety gear.
 - Retake costs scale with length (28 credits per second at 720p); count them before offering a retake.
+
+## Lessons from the first full book (read 2026-11-18)
+- `INVALID_INPUT_INACCESSIBLE` on a still or clip generation is intermittent: retry with a NEW quote (the failed charge is refunded; confirm on the balance).
+- A quote is bound to the exact link count: send the same number of links you quoted.
+- `generate_speech`: the quote is voice-bound and length-tiered; estimate with text "x" for lines of 110 characters or fewer, generate with the real text.
+- `generate_lipsync` (sync-3, `cut_off`): output covers the audio length from the clip start; about 17-19 credits per audio second; one per call. It animates the visible face whatever voice is sent, so never send narrator, phone or off-screen voices.
+- `extract_frames` on a finished clip returns merged-video keyframe jpg URLs that work as reference images for a scene-master repair keyframe.
+- Seedance turns skin red or orange on "flush", "colouring", "blush": write "skin colour unchanged and never red".
+- `run_ffmpeg`: one job at a time per module (`module_busy`, retry), at most 5 jobs per call; a 108-input voice track and a 16-segment picture part both work; a 550 s final join with loudnorm takes about 10 minutes. Use each chapter's own module for parallel chapters.
+- `wait_task` returns about every 28 s with `still_running`; wait on the slowest id and loop. Foreground `sleep` is blocked in the harness: use Monitor until-loops.

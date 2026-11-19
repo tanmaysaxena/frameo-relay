@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+## 0.6.0 (2026-11-20): first full book (10 chapters)
+
+- Learned from producing a whole book end to end: `skills/book-breakdown/references/production-playbook.md` (order of work, costs, scene-master continuity repair, per-speaker lipsync rules, clothing continuity rules, parallel per-chapter workers, finish-pass lessons) and a **series style charter gate**: a chapter is not finished without bubbles on every dialogue line, caption boxes and the transition rules (halftone in all directions; zoom-in + fade at scene changes); conductor rule 12, finish-cut gate, book-breakdown asks for and records `STYLE-CHARTER.md` first.
+- Content ceiling tiers in `content-boundaries.md` (clothed, implied/silhouette, mainstream-drama nudity with nothing explicit); never default to tier 3, never ladder on the filter.
+- `frameo-gotchas.md`: lessons from the first full book (retry on `INVALID_INPUT_INACCESSIBLE`, quote binding, speech quote tiers, sync-3 behaviour, `extract_frames` as scene-master references, `run_ffmpeg` limits).
+
+- Overlay pass for a finished cut: `skills/finish-cut/scripts/overlay_pass.py` (reference `skills/finish-cut/references/overlay-pass.md`) puts comic speech bubbles with name tags on every dialogue line (angular polygon, tail to the speaker's face, never over a face, long lines split into timed bubbles), caption boxes for narration, phone bubbles, halftone dot wipes in 8 shuffled directions on cuts inside a scene and a zoom-in + fade on scene changes, all as `run_ffmpeg` overlay jobs that keep the picture length and stream-copy the original audio. `halftone_transition.mask_expr` gains an optional flat-peak `hold`.
+- Book-production scripts, the reusable core of the first full book: `skills/conductor/scripts/chapter_driver.py` (keyframe, clip, retake and speech calls split into a free estimate and the saved generate call; state, result and ledger recording; review briefs), `skills/conductor/scripts/lipsync_plan.py` (sync-3 plan, audio jobs, calls, results) and `skills/finish-cut/scripts/cut_builder.py` (cut spec to picture parts, voice track, music beds and the final loudnorm join). Documented in `skills/conductor/references/book-production-scripts.md`; tests in `tests/test_book_scripts.py`.
+
 ## 0.5.1 (2026-11-17): scanned-PDF detection fix
 
 - `book_extract.py`: a successful `pdftotext` run counts as a read even when every page is blank, so a scanned book now gets the intended "no text layer, run OCR" message instead of a misleading "no PDF reader found" (found by CI on Windows). Regression test added.

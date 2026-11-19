@@ -46,9 +46,14 @@ DIRS = {
 }
 
 
-def mask_expr(direction, dur=DUR, pitch=PITCH, rmax=RMAX, lag=0.0, dx=0, dy=0):
+def mask_expr(direction, dur=DUR, pitch=PITCH, rmax=RMAX, lag=0.0, dx=0, dy=0, hold=0.0):
+    """geq mask for one direction. `hold` (0..0.4) is the share of `dur` the frame stays fully covered at the peak:
+    0 keeps the original 0.45 s grow / 0.45 s shrink; 0.2 gives a flat peak that hides a cut placed a frame or two off."""
     s = DIRS[direction].replace("X", "(X-%d)" % dx).replace("Y", "(Y-%d)" % dy)
     p = "(max(T-%.3f,0)/%.3f)" % (lag, dur / 2)
+    if hold > 0:
+        hh = min(float(hold), 0.4)
+        p = "if(lt(%s,%.3f),%s/%.3f,if(lt(%s,%.3f),1,1+(%s-%.3f)/%.3f))" % (p, 1 - hh, p, 1 - hh, p, 1 + hh, p, 1 + hh, 1 - hh)
     a = "if(lt(%s,1),clip((%s*1.7-(%s))*3,0,1),1-clip(((%s-1)*1.7-(%s))*3,0,1))" % (p, p, s, p, s)
     du = "mod(((X-%d)+(Y-%d))*0.70711+4000,%d)-%d" % (dx, dy, pitch, pitch // 2)
     dv = "mod(((X-%d)-(Y-%d))*0.70711+4000,%d)-%d" % (dx, dy, pitch, pitch // 2)

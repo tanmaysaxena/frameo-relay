@@ -55,7 +55,7 @@ chains[]           a chain = scenes that flow into each other; a hard cut = a ch
                      last frame and this clip's real extracted first frame        (check-result)
 ```
 
-Companion files in the job folder: `plan.md` (the approved plan), `calls/<id>.json` (exact paid call and quote ids, saved BEFORE sending), `ledger.jsonl` (one row per charge: `{kind: reference|keyframe|clip|retake|speech|analysis, segment, credits_charged, generation_id, refunded}`), `chains/<id>/prep-*.json` and `review-*.json` (subagent notes), `manifest.json`.
+Companion files in the job folder: `plan.md` (the approved plan), `calls/<id>.json` (exact paid call and quote ids, saved BEFORE sending), `ledger.jsonl` (one row per charge: `{kind: reference|keyframe|clip|retake|speech|lipsync|analysis, segment, credits_charged, generation_id, refunded}`), `chains/<id>/prep-*.json` and `review-*.json` (subagent notes), `manifest.json`.
 
 ## What the validator does not prove
 - That a `media_id` exists in Frameo, or that a generated clip matches its frame. The conductor checks with Frameo's tools; reviewers look at the real frames.

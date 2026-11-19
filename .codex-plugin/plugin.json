@@ -1,6 +1,6 @@
 {
   "name": "frameorelay",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "A relay for Frameo video jobs: turn a script into a validated plan, then run many scenes in parallel without breaking continuity, style or the approved spend. Skills: book-breakdown, panel-writer, script-injector, conductor, scene-prep, review, finish-cut, frameo-knowledge.",
   "author": { "name": "Tanmay Saxena" },
   "homepage": "https://github.com/tanmaysaxena/frameo-relay",

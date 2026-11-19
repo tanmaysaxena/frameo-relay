@@ -4,7 +4,7 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script, **or a who
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.5.1, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.6.0, early. It was built on real runs (a 9:16 story with 19 clips, voiced speech bubbles, music and effects) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
 
 > **New in 0.5: whole books.** Give it a book PDF and `book-breakdown` finds the chapters, sets each chapter's film length from its size (3 to 15 minutes), builds one shared series bible (recurring characters, places and style), gives **every chapter its own new Frameo module** in one project, plans all chapters **in parallel**, and ends in one book plan with a credit cap per chapter. [Read the whole-book pipeline](#whole-books-the-book-breakdown-pipeline) or say *"use the book breakdown on this PDF"*.
 
