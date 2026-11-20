@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.7.1 (2026-11-20): next-run checklist and long-run operations
+
+- `production-playbook.md`: a next-run checklist (style charter, render order, per-speaker lipsync, finish pass) and the operational lessons from a ten-worker run: usage-limit stalls and resuming workers, host permission classifier blocks (never worked around, ask the owner), shared-ffmpeg limits, disk space, workers that hand back early, chapter-suffixed scripts, one-question-up-front for spend.
+
 ## 0.7.0 (2026-11-20): render order, sequential inside a scene, parallel across scenes
 
 - Render order rule in the conductor (and the playbook, the chapter-planner and the book runbook): a chain is a continuity group; inside it each shot opens on the real extracted last frame of the one before and is reviewed (3 frames, one retake) before the next starts; separate scenes fan out in parallel, one scene agent per chain, at most `job.max_parallel_agents` (default 4).

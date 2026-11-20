@@ -1,6 +1,6 @@
 {
   "name": "frameorelay",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Frameo video relay: book-breakdown, panel-writer, script-injector, conductor, scene-prep, review, finish-cut and frameo-knowledge skills plus a stdlib validator (scripts/relay_check.py) that keeps parallel scene work continuous, on-style and inside the approved spend.",
   "license": "Apache-2.0",
   "entry_points": {

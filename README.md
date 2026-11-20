@@ -4,7 +4,7 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script, **or a who
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.7.0, early. It was built on real runs (short films, then a ten-chapter book) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.7.1, early. It was built on real runs (short films, then a ten-chapter book) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
 
 > **New in 0.7: render order that keeps continuity and still fans out.** A chain is now a continuity group (one place, unbroken time): its shots render one after another, each opening on the real last frame of the one before and passing a quick face-and-clothing check before the next starts, while genuinely separate scenes render in parallel, one scene agent each (up to 4 at a time). `check-chains` now warns when adjacent chains share a place with no stated break. The first book rendered every shot in parallel and paid for it in continuity repairs; this is the fix.
 
