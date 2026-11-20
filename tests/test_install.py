@@ -166,14 +166,20 @@ def test_frontmatter_scalars_are_yaml_safe():
         assert data.get("name") and data.get("description"), p
 
 
-def test_license_is_apache_everywhere():
-    """LICENSE is the standard Apache-2.0 text and every manifest agrees (a stale MIT field would mislead users)."""
+def test_license_is_polyform_with_individual_permission():
+    """LICENSE is the unmodified PolyForm Noncommercial text, COMMERCIAL-LICENSE.md carries the individual permission and the perpetual
+    organisation licence, and every manifest points at both (a stale Apache field would mislead users)."""
     import json
     lic = open(os.path.join(ROOT, "LICENSE"), encoding="utf-8").read()
-    assert "Apache License" in lic and "Version 2.0, January 2004" in lic
-    assert "MIT License" not in lic
-    assert os.path.isfile(os.path.join(ROOT, "NOTICE"))
+    assert lic.startswith("# PolyForm Noncommercial License 1.0.0")
+    assert "Apache License" not in lic and "MIT License" not in lic
+    com = open(os.path.join(ROOT, "COMMERCIAL-LICENSE.md"), encoding="utf-8").read()
+    assert "Individual" in com and "perpetual" in com and "Organisation" in com
+    assert "0.4.0 to 0.7.1" in com  # earlier Apache/MIT releases are called out
+    notice = open(os.path.join(ROOT, "NOTICE"), encoding="utf-8").read()
+    assert "Required Notice:" in notice
+    want = "SEE LICENSE IN LICENSE AND COMMERCIAL-LICENSE.md"
     for rel in (".claude-plugin/plugin.json", ".codex-plugin/plugin.json", "agent.json"):
-        assert json.load(open(os.path.join(ROOT, rel), encoding="utf-8"))["license"] == "Apache-2.0", rel
+        assert json.load(open(os.path.join(ROOT, rel), encoding="utf-8"))["license"] == want, rel
     market = json.load(open(os.path.join(ROOT, ".claude-plugin", "marketplace.json"), encoding="utf-8"))
-    assert all(p.get("license") == "Apache-2.0" for p in market["plugins"] if "license" in p)
+    assert all(p.get("license") == want for p in market["plugins"] if "license" in p)

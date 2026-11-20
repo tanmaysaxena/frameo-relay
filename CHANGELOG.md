@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.8.0 (2026-11-20): licence change, free for individuals, paid for organisations
+
+- From 0.8.0 the project is source-available: `LICENSE` is the PolyForm Noncommercial License 1.0.0 (unmodified); `COMMERCIAL-LICENSE.md` adds a permission for individuals (a solopreneur or freelancer working alone may use it commercially for free) and sets a **perpetual commercial licence for organisations**, bought by opening an issue titled `Commercial licence`. Manifests now say `SEE LICENSE IN LICENSE AND COMMERCIAL-LICENSE.md`.
+- Versions 0.4.0 to 0.7.1 stay under Apache-2.0 and 0.2.0 to 0.3.1 under MIT for copies already obtained; the change applies to new releases.
+
 ## 0.7.1 (2026-11-20): next-run checklist and long-run operations
 
 - `production-playbook.md`: a next-run checklist (style charter, render order, per-speaker lipsync, finish pass) and the operational lessons from a ten-worker run: usage-limit stalls and resuming workers, host permission classifier blocks (never worked around, ask the owner), shared-ffmpeg limits, disk space, workers that hand back early, chapter-suffixed scripts, one-question-up-front for spend.
