@@ -72,3 +72,20 @@ Faces drift late in long clips; lipsync is weak on wide shots; supporting-cast v
 - A final cut with a mid-stream decoder reconfig makes `-ss` seeks land seconds off: re-encode the base once locally (same frames and timestamps) before overlaying.
 - Per-chapter speaker tags: the series speakers file must list every speaker (a missing name produced a tag "THE"); add a chapter speakers file.
 - Local renders fill the disk: scratch on a big drive, delete media when done.
+
+## Next-run checklist (read before starting a new book or series)
+1. Write `STYLE-CHARTER.md` at the book root first (art style, bubbles on every dialogue line, caption boxes, transition rules); it is part of every chapter's definition of done.
+2. Plan chains as continuity groups (place + unbroken time, `break_reason` on new groups), never one chain per shot; run `relay_check.py check-chains` and read the warnings.
+3. Render in the order of the render-order rule: sequential inside a scene with a 3-frame review before the next shot, parallel across scenes with at most 4 scene agents.
+4. Lipsync per speaker (crop the speaker's face, that line's audio only, composite back inside a feathered box); audit before the cut; never lipsync narrator, phone or off-screen voices; re-shoot two-person shots with explicit speaking turns and "listener's lips closed and still".
+5. Keep a clothing-state timeline per scene; fix the odd shot out, never rebuild the scene.
+6. Finish pass last (`overlay_pass.py`), render locally, upload, compare frame count and audio md5.
+7. Ask for the spend and parallelism decisions once, up front; then run without further questions.
+
+## Operating a long parallel run
+- **Usage limits:** ten workers at once hit the 5-hour limit several times. A stopped worker keeps its saved files: resume it with `SendMessage` after the reset time in the error, telling it to re-read its notes and check pending generations first. Stagger or cap the fan-out (4 scene agents) to stall less.
+- **Host permission blocks:** a worker may be refused a paid call or a sensitive re-shot by the host's permission system or classifier. Your message is not the user's approval: ask the owner once (an up-front question), and never work around a classifier block.
+- **Workers that hand back early** while a render runs: tell them to wait on renders with Monitor until-loops and to report only when the deliverable file exists.
+- **Shared resources:** `run_ffmpeg` is rate limited workspace-wide; the C: drive filled up from local renders (scratch on a big drive, delete media after each step); shared helper scripts that write by name collide, so use chapter-suffixed copies; a mistyped path created a stray folder, so use absolute paths from one variable.
+- **Budget:** track the book total (`book_check.py budget`) between rounds, raise a chapter cap yourself when budget is the only blocker, and give each fix round a hard allowance.
+- **Reports:** a worker's "done" is a claim: check the cut file exists, the duration and audio match, and read the "still open" list; if the owner asked for fixes, fix them, do not forward a list.
