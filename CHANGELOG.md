@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.7.0 (2026-11-20): render order, sequential inside a scene, parallel across scenes
+
+- Render order rule in the conductor (and the playbook, the chapter-planner and the book runbook): a chain is a continuity group; inside it each shot opens on the real extracted last frame of the one before and is reviewed (3 frames, one retake) before the next starts; separate scenes fan out in parallel, one scene agent per chain, at most `job.max_parallel_agents` (default 4).
+- `relay_check.py check-chains` warns when adjacent chains share a place lock with no `break_reason` (new optional field on a chain), with tests.
+
 ## 0.6.0 (2026-11-20): first full book (10 chapters)
 
 - Learned from producing a whole book end to end: `skills/book-breakdown/references/production-playbook.md` (order of work, costs, scene-master continuity repair, per-speaker lipsync rules, clothing continuity rules, parallel per-chapter workers, finish-pass lessons) and a **series style charter gate**: a chapter is not finished without bubbles on every dialogue line, caption boxes and the transition rules (halftone in all directions; zoom-in + fade at scene changes); conductor rule 12, finish-cut gate, book-breakdown asks for and records `STYLE-CHARTER.md` first.

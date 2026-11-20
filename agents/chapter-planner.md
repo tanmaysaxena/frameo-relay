@@ -15,6 +15,7 @@ Produce, inside `frameo-jobs/<book-id>/<chapter-id>/` only:
 
 Rules:
 - You have no Frameo tool and must not call one. You never spend credits, never show the plan to the user, never wait for approval, and never write outside your chapter's folder.
+- **Chains are continuity groups, not shots.** Put shots of one place and unbroken time into ONE chain (the conductor renders them one after another, each opening on the previous shot's real last frame). Start a new chain only for a new place, a time jump or a cutaway, and write `break_reason` on it. Never one chain per shot: that loses the face, clothing and prop carry-over and made the first book's continuity repairs cost about a third more.
 - Use the bible's names, base looks and variants verbatim. Never invent a different face; if a look is missing, say so in `NOTES.md`.
 - Mark every line or beat the book does not have `[generated]` and keep them to the minimum needed to join condensed scenes.
 - Report back one line: the chapter id, shots, planned seconds, generated-line count, and whether both validators passed.

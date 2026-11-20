@@ -334,6 +334,39 @@ def check_chains(d: dict, scratch: bool = False) -> Report:
             prev = seg
         if covered != scene_ids:
             r.fail(f"chain {cid}: segments cover scenes {covered}, chain lists {scene_ids} (same scenes, same order)")
+    r.merge(check_continuity_groups(d))
+    return r
+
+
+def check_continuity_groups(d: dict) -> Report:
+    """Warn when consecutive chains share a place lock and nothing says the story breaks between them.
+
+    A chain is a continuity group: shots of one place and unbroken time render one after another, each opening on
+    the real extracted last frame of the one before (and are reviewed before the next starts), while groups that
+    are really separate (new place, a time jump, a cutaway) fan out in parallel. A chapter planned as one chain per
+    shot loses that carry-over (faces, clothes, props drift), so adjacent chains in the same place must either be
+    merged or carry a `break_reason`.
+    """
+    r = Report()
+    chains = d.get("chains") or []
+    kinds = {i.get("id"): i.get("kind") for i in ((d.get("locks") or {}).get("items") or [])}
+
+    def places(chain: dict) -> frozenset:
+        found = set()
+        for seg in chain.get("segments") or []:
+            for ref in seg.get("refs_used") or []:
+                if kinds.get(ref) == "location":
+                    found.add(ref)
+        return frozenset(found)
+
+    for prev, cur in zip(chains, chains[1:]):
+        shared = places(prev) & places(cur)
+        if shared and not is_nonempty_str(cur.get("break_reason")):
+            r.warn(
+                f"chains {prev.get('id')} and {cur.get('id')} both use place lock(s) {', '.join(sorted(shared))} with no break_reason: "
+                "merge them into one chain (sequential, each shot opens on the extracted last frame of the one before) "
+                "or set chain.break_reason (new place, time jump, cutaway)"
+            )
     return r
 
 

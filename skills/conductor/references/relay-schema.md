@@ -12,6 +12,7 @@ job
   resolution       "480p" | "720p" | ...
   model            default "seedance_2_5"
   max_parallel     int, calls in flight; measure, do not assume
+  max_parallel_agents  int, scene agents in flight (chains fan out, shots inside a chain stay sequential); default 4
   limits.models    {<model>: {seconds:[min,max], aspect_ratios:[...],
                               max_reference_images:int}}  copied from list_models (check-chains, check-ready)
 style              (frozen by `lock`)

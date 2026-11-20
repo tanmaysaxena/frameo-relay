@@ -11,6 +11,9 @@ Keyframes (heated shots first) -> clips (silent) -> strict face review -> scene-
 ## Costs (720p, per chapter of about 45-55 shots, 550-590 s)
 - Keyframes 18 cr each (about 900); clips 28 cr/s (about 16,000); repairs about 25% of shots (keyframe 18 + clip 28/s, 2,000-5,000); speech 1 cr per line (about 100 lines); music 66 cr per 120 s bed (5-7 beds); lipsync sync-3 17-19 cr per audio second (230-300 s of dialogue = 4,000-5,500). A closed chapter lands at 25,000-40,000 credits. Plan the book at about 3,000 cr per film minute all in, with a cap per chapter of 130% of its runtime share.
 
+## Render order: sequential inside a scene, parallel across scenes
+The first book made one chain per shot and rendered all keyframes and clips in parallel, which is why faces, clothes and props drifted and a third of the shots needed scene-master repairs or re-shoots. The rule now: a **chain is a continuity group** (one place, unbroken time). Inside it shot N+1 opens on the extracted real last frame of shot N, and shot N gets a quick 3-frame review (face, outfit and clothing state, props, lens stare) with one retake before shot N+1 starts. Chains for separate scenes (new place, time jump, cutaway; `break_reason` on the chain) fan out in parallel, one scene agent per chain, at most 4 at a time, across chapters too. The validator warns on adjacent chains in the same place with no `break_reason`. Fewer retakes and repairs are the payoff for the slower scene; the fan-out recovers the wall-clock time.
+
 ## Continuity: the scene-master method (the fix that worked)
 Per-shot clips drift: faces change, hair and outfits swap, skin turns red or grey, extra people appear. What fixed it, in order of cost:
 1. **Review every shot strictly** (a `review` subagent per shot, at least 6 frames each, against the character sheets and the neighbouring shots of the same scene). Record `clean_until_s`, `clean_from_s` and defects.

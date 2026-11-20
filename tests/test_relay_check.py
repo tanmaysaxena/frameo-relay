@@ -213,6 +213,37 @@ class ValidateTests(Base):
         self.assertEqual(run(["check-chains", self.job(d).path])[0], 1)
 
 
+class ContinuityGroupTests(Base):
+    def with_place(self, break_reason=None):
+        d = sample()
+        d["locks"]["items"].append({"id": "office", "kind": "location", "description": "an office"})
+        for chain in d["chains"]:
+            for seg in chain["segments"]:
+                seg["refs_used"] = seg["refs_used"] + ["office"]
+        if break_reason:
+            d["chains"][1]["break_reason"] = break_reason
+        return d
+
+    def test_adjacent_chains_in_the_same_place_warn(self):
+        code, out = run(["check-chains", self.job(self.with_place()).path])
+        self.assertEqual(code, 0)
+        self.assertIn("no break_reason", out)
+        self.assertIn("office", out)
+
+    def test_break_reason_silences_the_warning(self):
+        code, out = run(["check-chains", self.job(self.with_place("time jump")).path])
+        self.assertEqual(code, 0)
+        self.assertNotIn("no break_reason", out)
+
+    def test_different_places_do_not_warn(self):
+        d = self.with_place()
+        d["locks"]["items"].append({"id": "beach", "kind": "location", "description": "a beach"})
+        d["chains"][1]["segments"][0]["refs_used"] = ["maya", "style-ref", "beach"]
+        code, out = run(["check-chains", self.job(d).path])
+        self.assertEqual(code, 0)
+        self.assertNotIn("no break_reason", out)
+
+
 class LockTests(Base):
     def test_lock_then_verify_passes_then_tamper_fails(self):
         j = self.job()

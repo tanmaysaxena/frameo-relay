@@ -4,7 +4,9 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script, **or a who
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.6.0, early. It was built on real runs (short films, then a ten-chapter book) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.7.0, early. It was built on real runs (short films, then a ten-chapter book) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+
+> **New in 0.7: render order that keeps continuity and still fans out.** A chain is now a continuity group (one place, unbroken time): its shots render one after another, each opening on the real last frame of the one before and passing a quick face-and-clothing check before the next starts, while genuinely separate scenes render in parallel, one scene agent each (up to 4 at a time). `check-chains` now warns when adjacent chains share a place with no stated break. The first book rendered every shot in parallel and paid for it in continuity repairs; this is the fix.
 
 > **Proven on a whole book.** v0.6 comes from producing a full novel end to end: **10 chapters, about 99 minutes of vertical 9:16 film**, each chapter in its own Frameo module with its own credit cap, voiced, scored, lip-synced wherever a speaker is clearly visible, with comic speech bubbles, captions and halftone transitions on every cut. **439,280 credits in total, about 4,400 per finished minute, all-in**, including two complete fix sweeps and re-shoots. The sweeps are where it earned its keep: they caught wrong-face lipsync (the lipsync model moves one face, and not always the speaker's), clothes that came off, went back on and came off again, and continuity drift, and the fixes are now written into the skills so the next book skips those mistakes.
 
