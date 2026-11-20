@@ -23,7 +23,7 @@ Add or update a test in `tests/test_relay_check.py` when you change `scripts/rel
 
 ## License of contributions
 
-By submitting a pull request you agree that your contribution is licensed under the Apache License 2.0 (section 5 of the license), the same as the rest of the project.
+By submitting a pull request you agree that the maintainer may include your contribution in the project under its current terms ([LICENSE](LICENSE) and [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md)) and license it to organisations under commercial licences.
 
 ## Reporting a problem
 

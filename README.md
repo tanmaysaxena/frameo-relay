@@ -4,7 +4,9 @@ A set of [Agent Skills](https://agentskills.io/) that turns a script, **or a who
 
 > Unofficial. Not made by or affiliated with Frameo or Anthropic. It drives the Frameo MCP, which **spends real credits** on your Frameo account: read "Cost and safety" before running a job.
 
-Status: v0.7.1, early. It was built on real runs (short films, then a ten-chapter book) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+Status: v0.8.0, early. It was built on real runs (short films, then a ten-chapter book) and the lessons from them are in the skills. Expect rough edges; issues and PRs are welcome.
+
+> **Licence: free for individuals, paid for organisations.** Solopreneurs and freelancers working alone, and anyone using it noncommercially, use it free. A company, agency, studio or team using it commercially needs a perpetual commercial licence: see [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md).
 
 > **New in 0.7: render order that keeps continuity and still fans out.** A chain is now a continuity group (one place, unbroken time): its shots render one after another, each opening on the real last frame of the one before and passing a quick face-and-clothing check before the next starts, while genuinely separate scenes render in parallel, one scene agent each (up to 4 at a time). `check-chains` now warns when adjacent chains share a place with no stated break. The first book rendered every shot in parallel and paid for it in continuity repairs; this is the fix.
 
@@ -256,4 +258,6 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). Report security issues as described in [
 
 ## License
 
-[Apache License 2.0](LICENSE). Versions 0.2.0 to 0.3.1 were released under the MIT license; 0.4.0 and later are Apache-2.0 (see [NOTICE](NOTICE)).
+frameorelay is **source-available from 0.8.0**: **free for individuals**, including solopreneurs and freelancers working alone, and free for noncommercial use; **organisations that use it commercially buy a perpetual commercial licence**. The terms are [LICENSE](LICENSE) (PolyForm Noncommercial License 1.0.0, unmodified) plus [COMMERCIAL-LICENSE.md](COMMERCIAL-LICENSE.md) (the individual permission and how to buy). To buy, open an issue titled `Commercial licence` on this repository.
+
+Versions 0.4.0 to 0.7.1 were released under the Apache License 2.0 and 0.2.0 to 0.3.1 under the MIT license; copies you already have stay under the licence they came with (see [NOTICE](NOTICE)).

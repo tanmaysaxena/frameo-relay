@@ -18,7 +18,7 @@ import sys
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-INCLUDE = [".claude-plugin/plugin.json", "README.md", "LICENSE", "NOTICE", "SKILLS.md", "agent.json", "CHANGELOG.md"]
+INCLUDE = [".claude-plugin/plugin.json", "README.md", "LICENSE", "COMMERCIAL-LICENSE.md", "NOTICE", "SKILLS.md", "agent.json", "CHANGELOG.md"]
 INCLUDE_DIRS = ["skills", "agents", "examples", "docs"]
 INCLUDE_SCRIPTS = ["scripts/relay_check.py", "scripts/install.py"]
 SKIP_DIRS = {".git", "dist", "__pycache__", ".pytest_cache", "node_modules"}
